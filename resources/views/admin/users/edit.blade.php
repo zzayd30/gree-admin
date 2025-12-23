@@ -41,6 +41,31 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="company" class="form-label">Company</label>
+                            <input type="text" class="form-control @error('company') is-invalid @enderror" id="company"
+                                name="company" value="{{ old('company', $user->company) }}" required>
+                            @error('company')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="type_of_business" class="form-label">Type of Business</label>
+                            <select class="form-select select2 @error('type_of_business') is-invalid @enderror"
+                                id="type_of_business" name="type_of_business" required>
+                                <option value="" disabled>Select Type of Business</option>
+                                @foreach ($type_of_business as $businessType)
+                                    <option value="{{ $businessType->id }}"
+                                        {{ old('type_of_business', $user->type_of_business_id) == $businessType->id ? 'selected' : '' }}>
+                                        {{ $businessType->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('type_of_business')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="password" class="form-label">Password (leave blank to keep current)</label>
                             <input type="password" class="form-control @error('password') is-invalid @enderror"
                                 id="password" name="password">

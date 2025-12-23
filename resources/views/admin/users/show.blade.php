@@ -38,6 +38,18 @@
                                     <td>{{ $user->email }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Company</th>
+                                    <td>{{ $user->company ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type of Business</th>
+                                    <td>{{ $user->typeOfBusiness->name ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Role</th>
+                                    <td>{{ $user->role ?? 'N/A' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Email Verified</th>
                                     <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}</td>
                                 </tr>
