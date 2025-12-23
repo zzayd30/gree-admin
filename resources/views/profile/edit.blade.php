@@ -36,18 +36,9 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                                    @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="mb-3">
                                     <label for="company" class="form-label">Company</label>
                                     <input type="text" class="form-control @error('company') is-invalid @enderror"
-                                        id="company" name="company" value="{{ old('company', $user->company) }}" required>
+                                        id="company" name="company" value="{{ old('company', $user->company) }}" readonly>
                                     @error('company')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -56,7 +47,7 @@
                                 <div class="mb-3">
                                     <label for="type_of_business" class="form-label">Type of Business</label>
                                     <select class="form-select select2 @error('type_of_business') is-invalid @enderror"
-                                        id="type_of_business" name="type_of_business" required>
+                                        id="type_of_business" name="type_of_business" required disabled>
                                         <option value="" disabled>Select Type of Business</option>
                                         @foreach ($type_of_business as $businessType)
                                             <option value="{{ $businessType->id }}"
@@ -97,7 +88,7 @@
                             @if ($user->profile_picture)
                                 <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture"
                                     class="img-fluid rounded-circle"
-                                    style="width: 150px; height: 150px; object-fit: cover;">
+                                    style="width: 150px; height: 150px; object-fit: cover; margin: auto;">
                             @else
                                 <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center"
                                     style="width: 150px; height: 150px;">

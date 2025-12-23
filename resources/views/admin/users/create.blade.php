@@ -130,11 +130,11 @@
                         <label class="form-label">Email Address</label>
                         <input type="email" name="email" class="form-control custom-input" value="{{ old('email') }}" required>
                     </div>
-                    <div class="col-md-6 mb-4 text-start">
+                    {{-- <div class="col-md-6 mb-4 text-start">
                         <label class="form-label">Company Name</label>
                         <input type="text" name="company" class="form-control custom-input" value="{{ old('company') }}" required>
-                    </div>
-                    <div class="col-md-6 mb-4 text-start">
+                    </div> --}}
+                    {{-- <div class="col-md-6 mb-4 text-start">
                         <label class="form-label">Type of Business</label>
                         <select name="type_of_business" id="search_business" class="form-select select2 shadow-none" required>
                             <option value="" disabled selected>Search Business Type...</option>
@@ -142,7 +142,7 @@
                             <option value="{{ $bt->id }}" {{ old('type_of_business') == $bt->id ? 'selected' : '' }}>{{ $bt->name }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
                     <div class="col-md-6 mb-4 text-start">
                         <label class="form-label">Password</label>
                         <input type="password" name="password" class="form-control custom-input" required>

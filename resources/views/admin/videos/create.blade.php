@@ -183,6 +183,17 @@
             outline: 0;
             border: none !important;
         }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            background-color: transparent !important;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: 0 !important;
+            margin-top: -2px !important;
+        }
     </style>
 @endsection
 

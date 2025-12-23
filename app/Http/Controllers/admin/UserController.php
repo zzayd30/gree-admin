@@ -30,7 +30,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::where('name', '!=', 'Super Admin')->get();
         $type_of_business = TypeOfBusiness::where('deleted', false)
             ->orderBy('name')
             ->get();
