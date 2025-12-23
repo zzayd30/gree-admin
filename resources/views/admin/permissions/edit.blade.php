@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-@section('title', 'Create Permission')
+@section('title', 'Edit Permission')
 
 @section('content')
 <style>
@@ -24,46 +24,47 @@
         background-color: #f8fafc !important;
     }
 
-    .btn-submit {
+    /* Solid Blue Button */
+    .btn-update {
         background-color: #243a7f !important;
         color: white !important;
         padding: 14px 35px !important;
         border-radius: 12px !important;
         font-weight: 700 !important;
         border: none !important;
-        box-shadow: 0 5px 15px rgba(36, 58, 127, 0.3) !important;
+        display: inline-block !important;
         opacity: 1 !important;
         visibility: visible !important;
+        box-shadow: 0 5px 15px rgba(36, 58, 127, 0.3) !important;
     }
 </style>
 
 <div class="content-header px-4 pt-4 text-start">
     <div class="container-fluid">
         <h1 style="color: #243a7f; font-weight: 800;">
-            <i class="fas fa-plus-circle me-2"></i> Create Permission
+            <i class="fas fa-edit me-2"></i> Edit Permission
         </h1>
+        <p class="text-muted">Change the name of the system access level.</p>
     </div>
 </div>
 
 <section class="content px-4 mt-3">
     <div class="container-fluid">
-        <div class="form-card mx-auto mx-md-0">
-            <!-- Action ab sirf store par jayegi -->
-            <form method="POST" action="{{ route('permissions.store') }}">
+        <div class="form-card">
+            <form method="POST" action="{{ route('permissions.update', $permission->id) }}">
                 @csrf
+                @method('PUT') <!-- Update ke liye PUT lazmi hai -->
 
                 <div class="mb-4">
                     <label class="form-label">Permission Name</label>
                     <input type="text" name="name" class="form-control custom-input" 
-                           placeholder="e.g. View Reports" 
-                           value="{{ old('name') }}" required>
+                           value="{{ old('name', $permission->name) }}" required>
                     <x-input-error :messages="$errors->get('name')" class="text-danger small mt-2"/>
-                    <small class="text-muted d-block mt-2 font-italic text-sm">Use clear names like 'Create Users' or 'Delete Roles'.</small>
                 </div>
 
                 <div class="mt-5 d-flex align-items-center">
-                    <button type="submit" class="btn-submit">
-                        <i class="fas fa-plus-circle me-2"></i> Create Permission
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save me-2"></i> Update Permission
                     </button>
                     
                     <a href="{{ route('permissions.index') }}" class="ms-4 text-muted font-weight-bold text-decoration-none">

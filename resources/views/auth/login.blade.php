@@ -1,8 +1,9 @@
 <x-guest-layout>
     <div class="relative min-h-screen flex items-center justify-center bg-gray-900">
         <!-- Background Image with Overlay -->
+       <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2070" 
+            <img src="{{ asset('images/login-bg.jpg') }}" 
                  class="w-full h-full object-cover opacity-40">
             <!-- Blueish Gradient Overlay -->
             <div class="absolute inset-0 bg-gradient-to-t from-[#002e5a] via-transparent to-[#002e5a] opacity-70"></div>

@@ -1,56 +1,55 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('dashboard') }}" class="brand-link">
-        <img src="{{ asset('images/gree-logo.png') }}" alt="Gree Logo" class="brand-image" style="opacity: .8">
-        {{-- <span class="brand-text font-weight-light">Admin Panel</span> --}}
+    <a href="{{ route('dashboard') }}" class="brand-link text-center">
+        <img src="{{ asset('images/gree-logo.png') }}" alt="Gree Logo" class="brand-image img-fluid" style="float: none; max-height: 40px;">
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+        <nav class="mt-4">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <!-- Dashboard -->
-                <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('dashboard') }}" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-th-large"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
 
                 <!-- Users -->
-                <li class="nav-item {{ request()->is('admin/users*') ? 'active' : '' }}">
-                    <a href="{{ route('users.index') }}" class="nav-link">
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>Users</p>
+                        <p>Users Management</p>
                     </a>
                 </li>
 
                 <!-- Roles -->
-                <li class="nav-item {{ request()->is('admin/roles*') ? 'active' : '' }}">
-                    <a href="{{ route('roles.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-user-shield"></i>
+                <li class="nav-item">
+                    <a href="{{ route('roles.index') }}" class="nav-link {{ request()->is('admin/roles*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-tag"></i>
                         <p>Roles</p>
                     </a>
                 </li>
 
                 <!-- Permissions -->
-                <li class="nav-item {{ request()->is('admin/permissions*') ? 'active' : '' }}">
-                    <a href="{{ route('permissions.index') }}" class="nav-link">
-                        <i class="nav-icon fas fa-key"></i>
+                <li class="nav-item">
+                    <a href="{{ route('permissions.index') }}" class="nav-link {{ request()->is('admin/permissions*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-shield-alt"></i>
                         <p>Permissions</p>
                     </a>
                 </li>
 
+                <!-- Divider -->
+                <li class="nav-header mt-4 text-uppercase px-4" style="font-size: 0.7rem; color: rgba(255,255,255,0.4);">Account</li>
+
                 <!-- Logout -->
                 <li class="nav-item">
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout') }}" method="POST" id="logout-form">
                         @csrf
-                        <a href="#" class="nav-link"
-                            onclick="event.preventDefault(); this.closest('form').submit();">
-                            <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="nav-icon fas fa-power-off"></i>
                             <p>Logout</p>
                         </a>
                     </form>
@@ -58,20 +57,5 @@
 
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>
-<style>
-    .brand-link {
-        display: flex;
-        width: 100%;
-        padding: .71rem .5rem !important;
-    }
-
-    .brand-link .brand-image {
-        height: auto;
-        width: 100px;
-        margin: auto !important;
-    }
-</style>

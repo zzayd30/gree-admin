@@ -1,74 +1,145 @@
 @extends('admin.layout.app')
-@section('title', 'Users')
+@section('title', 'Users Management')
+
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Users</h1>
-                </div>
-                <div class="col-sm-6 text-end">
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
-                </div>
+<style>
+    .content-wrapper { background-color: var(--secondary-color) !important; }
+    .page-title { color: var(--primary-color); font-weight: 800; }
+
+    /* Button Fix (Always Visible) */
+    .btn-create-custom {
+        background-color: #243a7f !important;
+        color: white !important;
+        padding: 10px 25px !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        display: inline-block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        text-decoration: none !important;
+        box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
+    }
+
+    .modern-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        margin-top: 20px;
+    }
+
+    /* Table Header Fix */
+    .modern-table thead th {
+        background-color: #243a7f !important;
+        color: #ffffff !important;
+        padding: 20px 25px !important;
+        font-size: 13px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none !important;
+    }
+
+    .modern-table tbody td {
+        padding: 18px 25px !important;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f4f8 !important;
+    }
+
+    .user-role-badge {
+        background-color: var(--primary-color-light);
+        color: var(--primary-color);
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .btn-action-sm {
+        width: 35px; height: 35px; border-radius: 8px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border: none; transition: 0.3s; margin: 0 2px;
+    }
+</style>
+
+<div class="content-header px-4 pt-4">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-6 text-start">
+                <h1 class="page-title"><i class="fas fa-users-cog me-2"></i> Users Management</h1>
+                <p class="text-muted small mb-0 mt-1">Manage system administrators and user access.</p>
+            </div>
+            <div class="col-sm-6 text-end">
+                <a href="{{ route('users.create') }}" class="btn-create-custom">
+                    <i class="fas fa-user-plus me-1"></i> Create New User
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <section class="content">
-        <div class="container-fluid">
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+<section class="content px-4">
+    <div class="container-fluid">
+        @if(session('success'))
+            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4 mt-3">
+                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+            </div>
+        @endif
 
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered table-striped">
-                        <thead>
+        <div class="modern-card shadow-sm">
+            <div class="table-responsive">
+                <table class="table modern-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name & Email</th>
+                            <th>Assigned Roles</th>
+                            <th>Joined Date</th>
+                            <th class="text-center">Action Control</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Roles</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                                <tr>
-                                    <td>{{ $user->id }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>
-                                        @foreach ($user->roles as $role)
-                                            <span class="badge bg-primary">{{ $role->name }}</span>
-                                        @endforeach
-                                    </td>
-                                    <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                                    <td>
-                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info">View</a>
-                                        <a href="{{ route('users.edit', $user->id) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
+                                <td class="text-muted">#{{ $user->id }}</td>
+                                <td>
+                                    <div class="fw-bold text-dark" style="font-size: 15px;">{{ $user->name }}</div>
+                                    <div class="text-muted small">{{ $user->email }}</div>
+                                </td>
+                                <td>
+                                    @foreach ($user->roles as $role)
+                                        <span class="user-role-badge">{{ $role->name }}</span>
+                                    @endforeach
+                                </td>
+                                <td class="text-muted small">{{ $user->created_at->format('M d, Y') }}</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn-action-sm" style="background-color: #17a2b8; color: #fff;" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn-action-sm" style="background-color: #ffc107; color: #000;" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                         @if ($user->id !== auth()->id())
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Delete this user?')">Delete</button>
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="btn-action-sm" style="background-color: #dc3545; color: #fff;" onclick="return confirm('Delete this user?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </form>
                                         @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    {{ $users->links('pagination::bootstrap-5') }}
-                </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-3 border-top">
+                {{ $users->links('pagination::bootstrap-5') }}
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection

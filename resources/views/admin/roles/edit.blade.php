@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-@section('title', 'Create New Role')
+@section('title', 'Edit Role')
 
 @section('content')
 <style>
@@ -21,7 +21,6 @@
         box-shadow: 0 15px 35px rgba(36, 58, 127, 0.08);
         padding: 40px;
         border-top: 5px solid #243a7f;
-        /* Solid Blue Border */
     }
 
     .form-label {
@@ -47,7 +46,7 @@
         background-color: #fff !important;
     }
 
-    /* Permission Tile Styling */
+    /* Permission Tile Styling (Using Label for better click) */
     .permission-tile {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -58,6 +57,7 @@
         cursor: pointer;
         display: flex;
         align-items: center;
+        width: 100%;
     }
 
     .permission-tile:hover {
@@ -69,9 +69,11 @@
         width: 1.3em !important;
         height: 1.3em !important;
         cursor: pointer;
-        margin-left: 0px !important;
+        margin-right: 12px !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
     }
-
+    
     .form-check-input:checked {
         background-color: #243a7f !important;
         border-color: #243a7f !important;
@@ -90,8 +92,8 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-sm-6 text-start">
-                <h1 class="page-title"><i class="fas fa-plus-circle me-2"></i> Create New Role</h1>
-                <p class="text-muted small mb-0 mt-1">Define system access by grouping permissions.</p>
+                <h1 class="page-title"><i class="fas fa-edit me-2"></i> Edit Role: {{ $role->name }}</h1>
+                <p class="text-muted small mb-0 mt-1">Modify access levels and permissions for this role.</p>
             </div>
         </div>
     </div>
@@ -102,41 +104,42 @@
         <div class="row">
             <div class="col-lg-10">
                 <div class="form-card">
-                    <form method="POST" action="{{ route('roles.store') }}">
+                    <form method="POST" action="{{ route('roles.update', $role->id) }}">
                         @csrf
+                        @method('PUT')
 
                         <!-- Role Name -->
                         <div class="mb-5">
-                            <label class="form-label">Role Identity (Name)</label>
-                            <input type="text" name="name" class="form-control custom-input"
-                                placeholder="e.g. Sales Manager" value="{{ old('name') }}" required>
-                            <x-input-error :messages="$errors->get('name')" class="text-danger small mt-2 ml-1" />
+                            <label class="form-label">Update Role Name</label>
+                            <input type="text" name="name" class="form-control custom-input" 
+                                   placeholder="Role Name" value="{{ old('name', $role->name) }}" required>
+                            <x-input-error :messages="$errors->get('name')" class="text-danger small mt-2 ml-1"/>
                         </div>
 
                         <!-- Permissions Grid -->
-                        
                         <div class="mb-4">
-                            <label class="form-label d-block border-bottom pb-3 mb-4 text-muted">Assign System Permissions</label>
+                            <label class="form-label d-block border-bottom pb-3 mb-4 text-muted">Modify Permissions</label>
                             <div class="row">
                                 @foreach($permissions as $permission)
-                                <div class="col-md-4">
-                                    <!-- Div ki jagah Label use karein aur onclick khatam kar dein -->
-                                    <label class="permission-tile">
-                                        <input class="form-check-input" type="checkbox" name="permissions[]"
-                                            value="{{ $permission->name }}">
-                                        <span class="permission-label">
-                                            {{ $permission->name }}
-                                        </span>
-                                    </label>
-                                </div>
+                                    <div class="col-md-4">
+                                        <!-- Div ki jagah Label use kiya ha taake tiles par bhi click ho -->
+                                        <label class="permission-tile">
+                                            <input class="form-check-input" type="checkbox" name="permissions[]" 
+                                                   value="{{ $permission->name }}" 
+                                                   @checked(in_array($permission->name, $rolePermissions))>
+                                            <span class="permission-label">
+                                                {{ $permission->name }}
+                                            </span>
+                                        </label>
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
 
                         <!-- Form Actions - Fixed with Inline Styles -->
                         <div class="mt-5 pt-4 border-top d-flex align-items-center">
-                            <button type="submit"
-                                style="background-color: #243a7f !important; 
+                            <button type="submit" 
+                                    style="background-color: #243a7f !important; 
                                            color: white !important; 
                                            padding: 14px 35px !important; 
                                            border-radius: 12px !important; 
@@ -146,17 +149,15 @@
                                            visibility: visible !important;
                                            box-shadow: 0 5px 15px rgba(36, 58, 127, 0.3) !important;
                                            cursor: pointer !important;">
-                                <i class="fas fa-check-circle me-2"></i> Create System Role
+                                <i class="fas fa-save me-2"></i> Update Role Settings
                             </button>
-
-                            <a href="{{ route('roles.index') }}"
-                                style="color: #64748b !important; 
+                            
+                            <a href="{{ route('roles.index') }}" 
+                               style="color: #64748b !important; 
                                       text-decoration: none !important; 
                                       font-weight: 600 !important; 
-                                      margin-left: 25px !important;
-                                      opacity: 1 !important;
-                                      visibility: visible !important;">
-                                <i class="fas fa-times me-1"></i> Cancel & Go Back
+                                      margin-left: 25px !important;">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
                             </a>
                         </div>
                     </form>

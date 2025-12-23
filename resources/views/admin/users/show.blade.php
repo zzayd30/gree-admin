@@ -1,102 +1,60 @@
 @extends('admin.layout.app')
-@section('title', 'View User')
+@section('title', 'User Details')
+
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>User Details</h1>
-                </div>
-                <div class="col-sm-6 text-end">
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary">Back</a>
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning">Edit</a>
-                </div>
+<style>
+    .content-wrapper { background-color: var(--secondary-color) !important; }
+    .detail-card { background: #fff; border-radius: 20px; border: none; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; }
+    .detail-header { background: #243a7f; color: #fff; padding: 15px 25px; font-weight: 700; }
+    .info-row { display: flex; padding: 15px 25px; border-bottom: 1px solid #f1f4f8; }
+    .info-label { width: 150px; font-weight: 700; color: #64748b; font-size: 13px; text-transform: uppercase; }
+    .info-value { font-weight: 600; color: #1e293b; }
+    .permission-badge { background: #f1f5f9; color: #243a7f; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; margin: 3px; border: 1px solid rgba(36,58,127,0.1); }
+</style>
+
+<div class="content-header px-4 pt-4">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-sm-6"><h1 class="page-title">User Profile</h1></div>
+            <div class="col-sm-6 text-end">
+                <a href="{{ route('users.index') }}" class="btn btn-outline-secondary rounded-pill px-4">Back</a>
+                <a href="{{ route('users.edit', $user->id) }}" class="btn-create-custom ms-2" style="padding: 8px 25px !important;">Edit Profile</a>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">User Information</h3>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th style="width: 200px">ID</th>
-                                    <td>{{ $user->id }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Name</th>
-                                    <td>{{ $user->name }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Email</th>
-                                    <td>{{ $user->email }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Company</th>
-                                    <td>{{ $user->company ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Type of Business</th>
-                                    <td>{{ $user->typeOfBusiness->name ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Role</th>
-                                    <td>{{ $user->role ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Email Verified</th>
-                                    <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Created At</th>
-                                    <td>{{ $user->created_at->format('Y-m-d H:i:s') }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Updated At</th>
-                                    <td>{{ $user->updated_at->format('Y-m-d H:i:s') }}</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+<section class="content px-4 mt-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-7 mb-4">
+                <div class="detail-card">
+                    <div class="detail-header">General Information</div>
+                    <div class="info-row"><div class="info-label">Full Name</div><div class="info-value">{{ $user->name }}</div></div>
+                    <div class="info-row"><div class="info-label">Email Address</div><div class="info-value">{{ $user->email }}</div></div>
+                    <div class="info-row"><div class="info-label">Company</div><div class="info-value">{{ $user->company ?? 'N/A' }}</div></div>
+                    <div class="info-row"><div class="info-label">Business Type</div><div class="info-value">{{ $user->typeOfBusiness->name ?? 'N/A' }}</div></div>
+                    <div class="info-row"><div class="info-label">Joined On</div><div class="info-value">{{ $user->created_at->format('M d, Y H:i') }}</div></div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Roles</h3>
-                        </div>
-                        <div class="card-body">
-                            @if ($user->roles->count() > 0)
-                                <ul class="list-group">
-                                    @foreach ($user->roles as $role)
-                                        <li class="list-group-item">
-                                            <strong>{{ $role->name }}</strong>
-                                            @if ($role->permissions->count() > 0)
-                                                <div class="mt-2">
-                                                    <small class="text-muted">Permissions:</small>
-                                                    <div class="mt-1">
-                                                        @foreach ($role->permissions as $permission)
-                                                            <span class="badge bg-secondary">{{ $permission->name }}</span>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </li>
+            </div>
+            <div class="col-md-5">
+                <div class="detail-card">
+                    <div class="detail-header">Roles & Permissions</div>
+                    <div class="p-4">
+                        @foreach($user->roles as $role)
+                            <div class="mb-3 pb-3 border-bottom last-child-border-0">
+                                <h6 class="fw-bold text-primary mb-2 text-uppercase tracking-wider" style="font-size: 12px;">{{ $role->name }}</h6>
+                                <div class="d-flex flex-wrap">
+                                    @foreach($role->permissions as $perm)
+                                        <span class="permission-badge">{{ $perm->name }}</span>
                                     @endforeach
-                                </ul>
-                            @else
-                                <p class="text-muted">No roles assigned</p>
-                            @endif
-                        </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
