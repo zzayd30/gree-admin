@@ -73,8 +73,6 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         };
-
-        // Auto-display toastr for session messages
         @if(session('success'))
             toastr.success("{{ session('success') }}");
         @endif

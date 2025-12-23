@@ -79,13 +79,8 @@
     </div>
 </div>
 
-<section class="content px-4">
-    <div class="container-fluid">
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4 mt-3">
-                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
-            </div>
-        @endif
+    <section class="content">
+        <div class="container-fluid">
 
         <div class="modern-card shadow-sm">
             <div class="table-responsive">
