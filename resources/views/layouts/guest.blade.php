@@ -20,15 +20,3 @@
         </div>
     </body>
 </html>
-
-ls -al ~/.ssh
-ssh-keygen -t ed25519 -C "your_email@example.com"
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-cat ~/.ssh/id_ed25519.pub
-git remote -v
-git remote set-url origin git@github.com:zzayd30/gree-admin.git
-ssh -T git@github.com
-git add .
-git commit -m "Your message"
-git push origin master
