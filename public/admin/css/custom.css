@@ -131,6 +131,7 @@
 }
 .form-control{
   border-color: #ced4da !important;
+  height: 50px !important;
 }
 .form-control:focus {
     box-shadow: none !important;

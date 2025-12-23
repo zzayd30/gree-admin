@@ -6,7 +6,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <nav class="mt-4">
+        <nav class="">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <!-- Dashboard -->
@@ -67,7 +67,7 @@
 
 
                 <!-- Divider -->
-                <li class="nav-header mt-4 text-uppercase px-4" style="font-size: 0.7rem; color: rgba(255,255,255,0.4);">Account</li>
+                <li class="nav-header text-uppercase px-4" style="font-size: 0.7rem; color: rgba(255,255,255,0.4);">Account</li>
 
                 <!-- Logout -->
                 <li class="nav-item">
