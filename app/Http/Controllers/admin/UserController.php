@@ -77,8 +77,11 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $userRoles = $user->roles->pluck('name')->toArray();
+        $type_of_business = TypeOfBusiness::where('deleted', false)
+            ->orderBy('name')
+            ->get();
 
-        return view('admin.users.edit', compact('user', 'roles', 'userRoles'));
+        return view('admin.users.edit', compact('user', 'roles', 'userRoles', 'type_of_business'));
     }
 
     public function update(Request $request, User $user)
@@ -86,6 +89,8 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'company' => ['required', 'string', 'max:255'],
+            'type_of_business' => ['required', 'exists:type_of_business,id'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['exists:roles,name'],
@@ -94,6 +99,9 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'company' => $request->company,
+            'type_of_business_id' => $request->type_of_business,
+            'role' => $request->roles ? $request->roles[0] : null,
         ]);
 
         if ($request->filled('password')) {
