@@ -3,29 +3,27 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\View\View;
+use Illuminate\Validation\Rules;
 
-class PasswordResetLinkController extends Controller
+class OtpPasswordResetController extends Controller
 {
     /**
-     * Display the password reset link request view.
+     * Display the forgot password form.
      */
-    public function create(): View
+    public function showForgotPasswordForm()
     {
         return view('auth.forgot-password');
     }
 
     /**
-     * Handle an incoming password reset link request.
-     * Sends OTP instead of reset link.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Send OTP to the user's email.
      */
-    public function store(Request $request): RedirectResponse
+    public function sendOtp(Request $request)
     {
         $request->validate([
             'email' => ['required', 'email', 'exists:users,email'],
@@ -96,5 +94,53 @@ class PasswordResetLinkController extends Controller
             ->with('email', $request->email)
             ->with('otp_verified', true)
             ->with('status', 'OTP verified successfully. Please set your new password.');
+    }
+
+    /**
+     * Display the reset password form.
+     */
+    public function showResetPasswordForm()
+    {
+        if (! session('otp_verified') || ! session('email')) {
+            return redirect()->route('password.request');
+        }
+
+        return view('auth.reset-password');
+    }
+
+    /**
+     * Reset the user's password.
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email', 'exists:users,email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Verify OTP still exists and is valid
+        $record = DB::table('password_reset_otps')
+            ->where('email', $request->email)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (! $record) {
+            return back()->withErrors(['email' => 'Session expired. Please request a new OTP.']);
+        }
+
+        // Update user's password
+        $user = User::where('email', $request->email)->first();
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Delete the used OTP
+        DB::table('password_reset_otps')->where('email', $request->email)->delete();
+
+        // Clear session
+        $request->session()->forget(['email', 'otp_verified']);
+
+        return redirect()->route('login')
+            ->with('status', 'Your password has been reset successfully. Please login with your new password.');
     }
 }

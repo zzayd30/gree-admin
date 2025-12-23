@@ -28,6 +28,7 @@ class User extends Authenticatable
         'company',
         'type_of_business_id',
         'role',
+        'profile_picture',
     ];
 
     /**
