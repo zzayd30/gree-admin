@@ -1,278 +1,138 @@
 @extends('admin.layout.app')
-@section('title', 'Edit Video')
+@section('title', 'Video Details')
+
 @section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Edit Video</h1>
-                </div>
-                <div class="col-sm-6 text-end">
-                    <a href="{{ route('videos.index') }}" class="btn btn-secondary">Back</a>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card">
-                <form action="{{ route('videos.update', $video->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="mb-3">
-                                    <label for="title" class="form-label">Video Title <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                        id="title" name="title" value="{{ old('title', $video->title) }}" required>
-                                    @error('title')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+<style>
+    .content-wrapper { background-color: var(--secondary-color) !important; }
+    .form-card { background: #ffffff; border: none; border-radius: 25px; padding: 40px; box-shadow: 0 15px 35px rgba(36, 58, 127, 0.08); border-top: 5px solid #243a7f; }
+    .form-label { font-weight: 700; color: #243a7f; text-transform: uppercase; font-size: 11px; margin-bottom: 8px; }
+    .custom-input { border-radius: 12px !important; padding: 12px 15px !important; border: 1px solid #e2e8f0 !important; background-color: #f8fafc !important; }
+    
+    .sidebar-card { background: #f8fafc; border-radius: 20px; padding: 25px; border: 1px solid #e2e8f0; }
+    .btn-submit-custom { background-color: #243a7f !important; color: white !important; padding: 14px 35px !important; border-radius: 12px !important; font-weight: 700; border: none !important; box-shadow: 0 5px 15px rgba(36, 58, 127, 0.3) !important; opacity: 1 !important; visibility: visible !important; }
+    
+    /* Select2 Multi-select styling */
+    .select2-container--default .select2-selection--multiple { border-radius: 12px !important; border: 1px solid #e2e8f0 !important; background-color: #f8fafc !important; padding: 5px !important; }
+</style>
 
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                                        rows="4">{{ old('description', $video->description) }}</textarea>
-                                    @error('description')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+<div class="content-header px-4 pt-4 text-start">
+    <div class="container-fluid">
+        <h1 class="page-title"><i class="fas fa-upload me-2"></i> {{ isset($video) ? 'Edit Video' : 'Add New Video' }}</h1>
+    </div>
+</div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Video Type <span class="text-danger">*</span></label>
-                                    <div class="d-flex gap-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="video_type"
-                                                id="video_type_link" value="link"
-                                                {{ old('video_type', $video->video_type) == 'link' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="video_type_link">
-                                                Video Link (YouTube/Vimeo)
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="video_type"
-                                                id="video_type_upload" value="upload"
-                                                {{ old('video_type', $video->video_type) == 'upload' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="video_type_upload">
-                                                Upload Video File
-                                            </label>
-                                        </div>
-                                    </div>
-                                    @error('video_type')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
+<section class="content px-4">
+    <div class="container-fluid text-start">
+        <form action="{{ isset($video) ? route('videos.update', $video->id) : route('videos.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @if(isset($video)) @method('PUT') @endif
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-card">
+                        <div class="mb-4">
+                            <label class="form-label">Video Title</label>
+                            <input type="text" name="title" class="form-control custom-input" value="{{ old('title', $video->title ?? '') }}" required>
+                        </div>
 
-                                <div class="mb-3" id="video_url_section">
-                                    <label for="video_url" class="form-label">Video URL <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control @error('video_url') is-invalid @enderror"
-                                        id="video_url" name="video_url" value="{{ old('video_url', $video->video_url) }}"
-                                        placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
-                                    <small class="form-text text-muted">Enter YouTube, Vimeo URL, or direct video
-                                        link</small>
-                                    @error('video_url')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control custom-input" rows="4">{{ old('description', $video->description ?? '') }}</textarea>
+                        </div>
 
-                                <div class="mb-3" id="video_file_section" style="display: none;">
-                                    <label for="video_file" class="form-label">Upload Video</label>
-                                    <input type="file" class="form-control @error('video_file') is-invalid @enderror"
-                                        id="video_file" name="video_file" accept="video/*">
-                                    <small class="form-text text-muted">Max size: 100MB. Leave empty to keep current video.
-                                        Formats: MP4, MOV, AVI, WMV</small>
-                                    @if ($video->video_file)
-                                        <div class="mt-2">
-                                            <small class="text-success"><i class="fas fa-check-circle"></i> Current video:
-                                                {{ basename($video->video_file) }}</small>
-                                        </div>
-                                    @endif
-                                    @error('video_file')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="thumbnail" class="form-label">Thumbnail Image</label>
-                                            <input type="file"
-                                                class="form-control @error('thumbnail') is-invalid @enderror" id="thumbnail"
-                                                name="thumbnail" accept="image/*">
-                                            <small class="form-text text-muted">Max size: 2MB. Leave empty to keep current
-                                                thumbnail</small>
-                                            @error('thumbnail')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="duration" class="form-label">Video Duration</label>
-                                            <input type="text"
-                                                class="form-control @error('duration') is-invalid @enderror"
-                                                id="duration" name="duration"
-                                                value="{{ old('duration', $video->duration) }}"
-                                                placeholder="e.g., 10:30 or 600">
-                                            <small class="form-text text-muted">Format: MM:SS or HH:MM:SS or
-                                                seconds</small>
-                                            @error('duration')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="mb-4">
+                            <label class="form-label">Video Source Type</label>
+                            <div class="d-flex gap-4">
+                                <label class="d-flex align-items-center"><input type="radio" name="video_type" value="link" class="me-2" {{ old('video_type', $video->video_type ?? 'link') == 'link' ? 'checked' : '' }}> YouTube/Vimeo Link</label>
+                                <label class="d-flex align-items-center"><input type="radio" name="video_type" value="upload" class="me-2" {{ old('video_type', $video->video_type ?? '') == 'upload' ? 'checked' : '' }}> Direct File Upload</label>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
-                                <div class="card bg-light">
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="status" class="form-label">Status <span
-                                                    class="text-danger">*</span></label>
-                                            <select class="form-select @error('status') is-invalid @enderror"
-                                                id="status" name="status" required>
-                                                <option value="draft"
-                                                    {{ old('status', $video->status) == 'draft' ? 'selected' : '' }}>Draft
-                                                </option>
-                                                <option value="published"
-                                                    {{ old('status', $video->status) == 'published' ? 'selected' : '' }}>
-                                                    Published</option>
-                                                <option value="archived"
-                                                    {{ old('status', $video->status) == 'archived' ? 'selected' : '' }}>
-                                                    Archived</option>
-                                            </select>
-                                            @error('status')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                        <div id="video_url_section" class="mb-4">
+                            <label class="form-label">Video URL</label>
+                            <input type="text" id="video_url" name="video_url" class="form-control custom-input" value="{{ old('video_url', $video->video_url ?? '') }}" placeholder="https://youtube.com/...">
+                        </div>
 
-                                        <div class="mb-3">
-                                            <label for="categories" class="form-label">Categories</label>
-                                            <select class="form-select select2 @error('categories') is-invalid @enderror"
-                                                id="categories" name="categories[]" multiple>
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}"
-                                                        {{ in_array($category->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
-                                                        {{ $category->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <small class="form-text text-muted">Select one or more categories</small>
-                                            @error('categories')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                        <div id="video_file_section" class="mb-4" style="display: none;">
+                            <label class="form-label">Upload Video File</label>
+                            <input type="file" id="video_file" name="video_file" class="form-control custom-input">
+                        </div>
 
-                                        <div class="mt-3 text-center">
-                                            @if ($video->thumbnail)
-                                                <img id="current-thumbnail"
-                                                    src="{{ asset('storage/' . $video->thumbnail) }}"
-                                                    alt="Current Thumbnail" class="img-fluid rounded"
-                                                    style="max-height: 200px;">
-                                            @endif
-                                            <div id="thumbnail-preview" style="display: none;">
-                                                <img id="preview-img" src="" alt="Preview"
-                                                    class="img-fluid rounded" style="max-height: 200px;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Custom Thumbnail</label>
+                                <input type="file" name="thumbnail" id="thumbnail" class="form-control custom-input">
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Duration (e.g. 10:30)</label>
+                                <input type="text" name="duration" class="form-control custom-input" value="{{ old('duration', $video->duration ?? '') }}">
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Update Video</button>
-                        <a href="{{ route('videos.index') }}" class="btn btn-secondary">Cancel</a>
+                <div class="col-lg-4">
+                    <div class="sidebar-card">
+                        <div class="mb-4">
+                            <label class="form-label">Publishing Status</label>
+                            <select name="status" class="form-select custom-input">
+                                <option value="published" {{ old('status', $video->status ?? '') == 'published' ? 'selected' : '' }}>Published</option>
+                                <option value="draft" {{ old('status', $video->status ?? '') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                <option value="archived" {{ old('status', $video->status ?? '') == 'archived' ? 'selected' : '' }}>Archived</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Select Categories</label>
+                            <select name="categories[]" id="cat_select" class="form-select select2" multiple>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ (isset($selectedCategories) && in_array($cat->id, $selectedCategories)) ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div id="thumbnail-preview" class="text-center mt-3">
+                            <label class="form-label d-block text-start">Thumbnail Preview</label>
+                            <img id="preview-img" src="{{ isset($video->thumbnail) ? asset('storage/'.$video->thumbnail) : '' }}" class="img-fluid rounded shadow-sm" style="max-height: 150px; "{{ !isset($video->thumbnail) ? 'display:none;' : '' }}">
+                        </div>
                     </div>
-                </form>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn-submit-custom w-100">{{ isset($video) ? 'Update Video' : 'Add Video to Library' }}</button>
+                        <a href="{{ route('videos.index') }}" class="btn btn-link w-100 text-muted fw-bold mt-2 text-decoration-none">Cancel</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
-    <style>
-        .select2-container--default .select2-dropdown .select2-search__field:focus,
-        .select2-container--default .select2-search--inline .select2-search__field:focus {
-            outline: 0;
-            border: none !important;
-        }
+        </form>
+    </div>
+</section>
 
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-            background-color: transparent !important;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            padding: 0 !important;
-            margin-top: -2px !important;
-        }
-    </style>
-@endsection
-
-@section('customjs')
-    // Video type toggle
+<!-- JS Logic for Toggle -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
     function toggleVideoSections() {
-    const checkedRadio = document.querySelector('input[name="video_type"]:checked');
-
-    if (!checkedRadio) {
-    return;
+        const videoType = $('input[name="video_type"]:checked').val();
+        if (videoType === 'link') {
+            $('#video_url_section').show(); $('#video_file_section').hide();
+        } else {
+            $('#video_url_section').hide(); $('#video_file_section').show();
+        }
     }
 
-    const videoType = checkedRadio.value;
-    const urlSection = document.getElementById('video_url_section');
-    const fileSection = document.getElementById('video_file_section');
-    const urlInput = document.getElementById('video_url');
-    const fileInput = document.getElementById('video_file');
-
-    if (!urlSection || !fileSection || !urlInput || !fileInput) {
-    console.error('Required elements not found');
-    return;
-    }
-
-    if (videoType === 'link') {
-    urlSection.style.display = 'block';
-    fileSection.style.display = 'none';
-    urlInput.removeAttribute('disabled');
-    fileInput.setAttribute('disabled', 'disabled');
-    } else if (videoType === 'upload') {
-    urlSection.style.display = 'none';
-    fileSection.style.display = 'block';
-    urlInput.setAttribute('disabled', 'disabled');
-    fileInput.removeAttribute('disabled');
-    }
-    }
-
-    // Initialize on page load
     $(document).ready(function() {
-    toggleVideoSections();
-
-    // Listen for radio button changes
-    $('input[name="video_type"]').on('change', function() {
-    toggleVideoSections();
+        toggleVideoSections();
+        $('input[name="video_type"]').on('change', toggleVideoSections);
+        $('#cat_select').select2({ placeholder: "Select categories..." });
+        
+        $('#thumbnail').on('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) { $('#preview-img').attr('src', event.target.result).show(); };
+            reader.readAsDataURL(e.target.files[0]);
+        });
     });
-
-    // Thumbnail preview
-    $('#thumbnail').on('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-    $('#preview-img').attr('src', event.target.result);
-    $('#thumbnail-preview').show();
-    const currentThumb = $('#current-thumbnail');
-    if (currentThumb.length) {
-    currentThumb.hide();
-    }
-    };
-    reader.readAsDataURL(file);
-    }
-    });
-    });
+</script>
 @endsection
