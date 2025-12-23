@@ -1,76 +1,120 @@
 @extends('admin.layout.app')
-@section('title', 'Categories')
-@section('content')
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Video Categories</h1>
-                </div>
-                <div class="col-sm-6 text-end">
-                    <a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a>
-                </div>
-            </div>
-        </div>
-    </section>
+@section('title', 'Video Categories')
 
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Slug</th>
-                                <th>Videos Count</th>
-                                <th>Status</th>
-                                <th>Created At</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($categories as $category)
-                                <tr>
-                                    <td>{{ $category->id }}</td>
-                                    <td>{{ $category->name }}</td>
-                                    <td><code>{{ $category->slug }}</code></td>
-                                    <td>
-                                        <span class="badge bg-info">{{ $category->videos_count }} videos</span>
-                                    </td>
-                                    <td>
-                                        @if ($category->is_active)
-                                            <span class="badge bg-success">Active</span>
-                                        @else
-                                            <span class="badge bg-secondary">Inactive</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $category->created_at->format('Y-m-d') }}</td>
-                                    <td>
-                                        <a href="{{ route('categories.show', $category->id) }}"
-                                            class="btn btn-sm btn-info">View</a>
-                                        <a href="{{ route('categories.edit', $category->id) }}"
-                                            class="btn btn-sm btn-warning">Edit</a>
-                                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                            class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Delete this category? This will only work if there are no videos in this category.')">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No categories found</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                    {{ $categories->links('pagination::bootstrap-5') }}
-                </div>
+@section('content')
+<style>
+    .content-wrapper { background-color: var(--secondary-color) !important; }
+    .page-title { color: var(--primary-color); font-weight: 800; }
+    
+    /* Button Fix */
+    .btn-create-custom {
+        background-color: #243a7f !important; color: white !important;
+        padding: 10px 25px !important; border-radius: 12px !important;
+        font-weight: 700 !important; display: inline-block !important;
+        text-decoration: none !important; box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
+    }
+
+    .modern-card {
+        background: #ffffff; border: none; border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); overflow: hidden; margin-top: 20px;
+    }
+
+    /* Table Header Force Blue */
+    .modern-table thead th {
+        background-color: #243a7f !important; color: #ffffff !important;
+        padding: 20px 25px !important; font-size: 13px !important;
+        text-transform: uppercase !important; border: none !important;
+    }
+
+    .modern-table tbody td {
+        padding: 18px 25px !important; vertical-align: middle !important;
+        border-bottom: 1px solid #f1f4f8 !important;
+    }
+
+    .status-badge { padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .bg-active { background-color: #d1fae5; color: #065f46; }
+    .bg-inactive { background-color: #f1f5f9; color: #64748b; }
+
+    .btn-action-sm {
+        width: 35px; height: 35px; border-radius: 8px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border: none; transition: 0.3s; margin: 0 2px;
+    }
+</style>
+
+<div class="content-header px-4 pt-4">
+    <div class="container-fluid">
+        <div class="row align-items-center text-start">
+            <div class="col-sm-6">
+                <h1 class="page-title"><i class="fas fa-folder-open me-2"></i> Video Categories</h1>
+                <p class="text-muted small mb-0 mt-1">Manage categories to organize your video library.</p>
+            </div>
+            <div class="col-sm-6 text-end">
+                <a href="{{ route('categories.create') }}" class="btn-create-custom">
+                    <i class="fas fa-plus-circle me-1"></i> Create Category
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+
+<section class="content px-4">
+    <div class="container-fluid">
+        <div class="modern-card shadow-sm">
+            <div class="table-responsive">
+                <table class="table modern-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name & Slug</th>
+                            <th class="text-center">Videos</th>
+                            <th class="text-center">Status</th>
+                            <th>Created At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($categories as $category)
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark" style="font-size: 15px;">{{ $category->name }}</div>
+                                    <code class="small text-pink" style="color: #d63384;">{{ $category->slug }}</code>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-light text-primary border px-3 py-2 rounded-pill">
+                                        <i class="fas fa-video me-1"></i> {{ $category->videos_count }}
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="status-badge {{ $category->is_active ? 'bg-active' : 'bg-inactive' }}">
+                                        {{ $category->is_active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ $category->created_at->format('M d, Y') }}</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ route('categories.show', $category->id) }}" class="btn-action-sm" style="background-color: #17a2b8; color: #fff;" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('categories.edit', $category->id) }}" class="btn-action-sm" style="background-color: #ffc107; color: #000;" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn-action-sm" style="background-color: #dc3545; color: #fff;" onclick="return confirm('Delete this category?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="text-center py-5 text-muted">No categories found.</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-4 py-3 border-top">{{ $categories->links('pagination::bootstrap-5') }}</div>
+        </div>
+    </div>
+</section>
 @endsection
