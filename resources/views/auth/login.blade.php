@@ -12,7 +12,7 @@
         <!-- Login Card - (Wide version with max-w-lg) -->
         <div class="relative z-10 w-full max-w-lg p-8 mx-4">
             <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-12 border border-white/20">
-                
+
                 <!-- Gree Logo -->
                 <div class="flex justify-center mb-6">
                     <img src="{{ asset('images/gree-logo.png') }}" alt="GREE" class="h-14 w-auto drop-shadow-md">
@@ -31,32 +31,40 @@
 
                     <!-- Email -->
                     <div class="mb-5">
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">Email Address</label>
-                        <input type="email" name="email" :value="old('email')" required autofocus 
-                               class="block w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#0054a6] focus:border-transparent transition-all duration-200 outline-none"
-                               placeholder="admin@gree.com.pk">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">Email
+                            Address</label>
+                        <input type="email" name="email" :value="old('email')" required autofocus
+                            class="block w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#0054a6] focus:border-transparent transition-all duration-200 outline-none"
+                            placeholder="admin@gree.com.pk">
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
                     <!-- Password -->
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">Password</label>
-                        <input type="password" name="password" required 
-                               class="block w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#0054a6] focus:border-transparent transition-all duration-200 outline-none"
-                               placeholder="••••••••">
+                        <label
+                            class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">Password</label>
+                        <input type="password" name="password" required
+                            class="block w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#0054a6] focus:border-transparent transition-all duration-200 outline-none"
+                            placeholder="••••••••">
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center justify-between mb-8 px-1">
                         <label class="flex items-center">
-                            <input type="checkbox" name="remember" class="rounded border-gray-300 text-[#0054a6] focus:ring-[#0054a6]">
+                            <input type="checkbox" name="remember"
+                                class="rounded border-gray-300 text-[#0054a6] focus:ring-[#0054a6]">
                             <span class="ml-2 text-sm text-gray-600">Remember me</span>
                         </label>
+                        <span>
+                            <a class="text-sm text-[#0054a6] hover:underline" href="{{ route('password.request') }}">
+                                Forgot your password?
+                            </a>
+                        </span>
                     </div>
 
                     <!-- Updated Blue Button -->
-                    <button type="submit" 
-                            class="w-full bg-[#0054a6] hover:bg-[#004080] text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-900/20 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                    <button type="submit"
+                        class="w-full bg-[#0054a6] hover:bg-[#004080] text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-900/20 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                         Sign In
                     </button>
                 </form>

@@ -36,6 +36,18 @@ class RolePermissionSeeder extends Seeder
             'Create Permissions',
             'Edit Permissions',
             'Delete Permissions',
+            
+            // Category permissions
+            'View Categories',
+            'Create Categories',
+            'Edit Categories',
+            'Delete Categories',
+            
+            // Video permissions
+            'View Videos',
+            'Create Videos',
+            'Edit Videos',
+            'Delete Videos',
         ];
 
         foreach ($permissions as $permission) {
