@@ -21,7 +21,14 @@
                 <li class="nav-item">
                     <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>Admin Users Management</p>
+                        <p>Users Management</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('customers.index') }}" class="nav-link {{ request()->is('admin/customers*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Customer Management</p>
                     </a>
                 </li>
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\TypeOfBusiness;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,12 +29,9 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::where('name', '!=', 'Super Admin')->get();
-        $type_of_business = TypeOfBusiness::where('deleted', false)
-            ->orderBy('name')
-            ->get();
+        $roles = Role::all();
 
-        return view('admin.users.create', compact('roles', 'type_of_business'));
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -43,9 +39,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'company' => ['required', 'string', 'max:255'],
-            'type_of_business' => ['required', 'exists:type_of_business,id'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'status' => ['required', 'in:active,inactive'],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['exists:roles,name'],
         ]);
@@ -53,10 +47,9 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'company' => $request->company,
-            'type_of_business_id' => $request->type_of_business,
             'role' => $request->roles ? $request->roles[0] : null,
-            'password' => Hash::make($request->password),
+            'status' => $request->status,
+            'password' => Hash::make('12341234'),
         ]);
 
         if ($request->roles) {
@@ -77,11 +70,8 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $userRoles = $user->roles->pluck('name')->toArray();
-        $type_of_business = TypeOfBusiness::where('deleted', false)
-            ->orderBy('name')
-            ->get();
 
-        return view('admin.users.edit', compact('user', 'roles', 'userRoles', 'type_of_business'));
+        return view('admin.users.edit', compact('user', 'roles', 'userRoles'));
     }
 
     public function update(Request $request, User $user)
@@ -89,9 +79,8 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
-            'company' => ['required', 'string', 'max:255'],
-            'type_of_business' => ['required', 'exists:type_of_business,id'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'status' => ['required', 'in:active,inactive'],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['exists:roles,name'],
         ]);
@@ -99,9 +88,8 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'company' => $request->company,
-            'type_of_business_id' => $request->type_of_business,
             'role' => $request->roles ? $request->roles[0] : null,
+            'status' => $request->status,
         ]);
 
         if ($request->filled('password')) {

@@ -2,19 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
-/**
- * @mixin IdeHelperUser
- */
-class User extends Authenticatable
+class Customer extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -25,9 +19,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'company',
+        'type_of_business_id',
         'profile_picture',
         'status',
+        'create_by_admin',
     ];
 
     /**
@@ -50,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'create_by_admin' => 'boolean',
         ];
     }
 }
