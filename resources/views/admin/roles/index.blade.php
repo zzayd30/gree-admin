@@ -9,37 +9,16 @@
         }
 
         /* Table Header Force Fix */
-        .roles-card {
+        /* .roles-card {
             background: #ffffff;
             border: none;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             margin-top: 30px;
             overflow: hidden;
-        }
+        } */
 
-        /* Header ko bilkul pakka blue karne ke liye */
-        .modern-table thead,
-        .modern-table thead tr,
-        .modern-table thead th {
-            background-color: #243a7f !important;
-            /* Direct color code use kiya hai */
-            color: #ffffff !important;
-            border: none !important;
-        }
-
-        .modern-table thead th {
-            padding: 20px 25px !important;
-            font-size: 13px !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .modern-table tbody td {
-            padding: 18px 25px !important;
-            vertical-align: middle !important;
-            border-bottom: 1px solid #f1f4f8 !important;
-        }
+        
 
         /* Permission Pills */
         .permission-badge {

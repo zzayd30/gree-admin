@@ -19,13 +19,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        $type_of_business = TypeOfBusiness::where('deleted', false)
-            ->orderBy('name')
-            ->get();
-
         return view('profile.edit', [
-            'user' => $request->user(),
-            'type_of_business' => $type_of_business,
+            'user' => $request->user()
         ]);
     }
 
@@ -36,9 +31,7 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->user()->id],
-            'company' => ['required', 'string', 'max:255'],
-            'type_of_business' => ['required', 'exists:type_of_business,id'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $request->user()->id],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
@@ -58,8 +51,6 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->company = $request->company;
-        $user->type_of_business_id = $request->type_of_business;
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

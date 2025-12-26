@@ -14,25 +14,82 @@ body {
     font-family: 'Public Sans', sans-serif;
 }
 
-/* --- SIDEBAR ALIGNMENT FIXES --- */
+/* --- 1. GLOBAL RESET FOR SHARP EDGES (Boss's Requirement) --- */
+/* Yahan se border-radius khatam kiya gaya hai poore project ke liye */
+.modern-card, 
+.btn-create-custom, 
+.btn-action-sm, 
+.user-role-badge, 
+.badge,
+.form-control,
+.form-select,
+.select2-selection,
+.card,
+.btn {
+    border-radius: 0px !important; 
+}
 
-/* 1. Sidebar Base */
+/* --- 2. UNIFIED TABLE STYLES (Continuous Gradient) --- */
+.modern-card {
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.modern-table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
+.modern-table thead {
+    /* Poori row par ek hi smooth gradient (Not section-wise) */
+    background: linear-gradient(90deg, #162549 0%, #4064d0 100%) !important;
+}
+
+.modern-table thead th {
+    background: transparent !important; /* Taake thead ka gradient nazar aaye */
+    color: #ffffff !important;
+    padding: 18px 20px !important;
+    font-size: 13px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none !important;
+}
+
+.modern-table tbody td {
+    padding: 15px 20px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #f1f4f8 !important;
+    color: #334155;
+}
+
+.modern-table tbody tr:hover {
+    background-color: rgba(227, 230, 239, 0.2) !important;
+}
+
+/* Common Action Buttons in Tables */
+.btn-action-sm {
+    width: 35px; height: 35px; 
+    display: inline-flex; align-items: center; justify-content: center;
+    border: none; transition: 0.3s; margin: 0 2px;
+}
+
+/* --- 3. SIDEBAR ALIGNMENT (Existing Fixes) --- */
 .main-sidebar {
     background-color: #1a2238 !important;
-    /* Deep Navy Blue */
     width: 250px !important;
 }
 
-/* 2. Brand Logo (White Box) Alignment */
 .brand-link {
     background-color: #ffffff !important;
     margin: 20px 15px 0px 15px !important;
-    border-radius: 12px !important;
+    border-radius: 0px !important; /* Sharp edge for logo box too */
     height: 60px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    /* Logo center mein rahega */
     padding: 0 !important;
     border-bottom: none !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
@@ -40,43 +97,29 @@ body {
 
 .brand-link .brand-image {
     float: none !important;
-    /* AdminLTE ka default float khatam */
     max-height: 35px !important;
     width: auto !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
 }
 
-/* 3. Menu Items Alignment */
-.nav-sidebar {
-    padding-top: 10px !important;
-}
-
-.nav-sidebar .nav-item {
-    width: 100% !important;
-    margin-bottom: 5px !important;
-}
+.nav-sidebar { padding-top: 10px !important; }
+.nav-sidebar .nav-item { width: 100% !important; margin-bottom: 5px !important; }
 
 .nav-sidebar .nav-link {
     display: flex !important;
     align-items: center !important;
-    /* Icon aur Text ko ek line mein karega */
     color: rgba(255, 255, 255, 0.7) !important;
     margin: 0 15px !important;
     padding: 12px 15px !important;
-    border-radius: 10px !important;
+    border-radius: 0px !important; /* Sharp edge for links */
     transition: 0.3s;
 }
 
-/* 4. Active Link Design */
 .nav-sidebar .nav-item .nav-link.active {
     background-color: var(--primary-color-light) !important;
     color: var(--primary-color) !important;
     font-weight: 700 !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* 5. Icons Spacing */
 .nav-sidebar .nav-link .nav-icon {
     margin-right: 12px !important;
     font-size: 1.1rem !important;
@@ -84,34 +127,26 @@ body {
     text-align: center !important;
 }
 
-/* 6. Account Header Style */
 .nav-header {
     color: rgba(255, 255, 255, 0.3) !important;
-    padding: 0 !important;
+    padding: 10px 25px 5px !important;
     font-size: 0.75rem !important;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-/* 7. Sidebar Hover */
 .nav-sidebar .nav-link:hover:not(.active) {
     background-color: rgba(255, 255, 255, 0.05) !important;
     color: #ffffff !important;
 }
 
-
+/* Sidebar Responsive Fixes */
 @media (min-width: 992px) {
-
     .sidebar-mini.sidebar-collapse .main-sidebar,
     .sidebar-mini.sidebar-collapse .main-sidebar::before {
         margin-left: 0;
         width: 4.6rem !important;
     }
-}
-
-@media (min-width: 992px) {
-
-    .sidebar-mini.sidebar-collapse .main-sidebar:not(.sidebar-no-expand).sidebar-focused,
     .sidebar-mini.sidebar-collapse .main-sidebar:not(.sidebar-no-expand):hover {
         width: 250px !important;
     }

@@ -26,31 +26,7 @@
             box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
         }
 
-        .modern-card {
-            background: #ffffff;
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            margin-top: 20px;
-        }
-
-        /* Table Header Fix */
-        .modern-table thead th {
-            background-color: #243a7f !important;
-            color: #ffffff !important;
-            padding: 20px 25px !important;
-            font-size: 13px !important;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none !important;
-        }
-
-        .modern-table tbody td {
-            padding: 18px 25px !important;
-            vertical-align: middle;
-            border-bottom: 1px solid #f1f4f8 !important;
-        }
+        
 
         .permission-name {
             font-weight: 700;

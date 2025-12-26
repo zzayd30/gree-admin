@@ -154,25 +154,6 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-4 text-start">
-                                    <label class="form-label">Company Name</label>
-                                    <input type="text" name="company" class="form-control custom-input"
-                                        value="{{ old('company', $user->company) }}" required>
-                                </div>
-                                <div class="col-md-6 mb-4 text-start">
-                                    <label class="form-label">Type of Business</label>
-                                    <select name="type_of_business" id="profile_biz_select" class="form-select select2"
-                                        required>
-                                        @foreach ($type_of_business as $bt)
-                                            <option value="{{ $bt->id }}"
-                                                {{ old('type_of_business', $user->type_of_business_id) == $bt->id ? 'selected' : '' }}>
-                                                {{ $bt->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
                             <div class="mb-4 text-start">
                                 <label class="form-label">Profile Picture (Avatar)</label>
                                 <input type="file" name="profile_picture" class="form-control custom-input"
