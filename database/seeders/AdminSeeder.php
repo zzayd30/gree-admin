@@ -63,6 +63,9 @@ class AdminSeeder extends Seeder
             'Create Customers',
             'Edit Customers',
             'Delete Customers',
+
+            // Email Log permissions
+            'View Email Logs',
         ];
 
         foreach ($permissions as $permission) {
@@ -105,7 +108,7 @@ class AdminSeeder extends Seeder
 
         $this->command->info('🔄 Creating Admin User...');
 
-        // Create admin user
+        // Create admin user first
         $admin = User::firstOrCreate(
             ['email' => 'admin@admin.com'],
             [
@@ -113,6 +116,7 @@ class AdminSeeder extends Seeder
                 'password' => Hash::make('12341234'),
                 'status' => 'active',
                 'role' => 'Super Admin',
+                'email_verified_at' => now(),
             ]
         );
 
@@ -120,6 +124,15 @@ class AdminSeeder extends Seeder
         if (!$admin->hasRole('Super Admin')) {
             $admin->assignRole('Super Admin');
         }
+
+        // Ensure email is verified if user already existed
+        if (!$admin->email_verified_at) {
+            $admin->update(['email_verified_at' => now()]);
+        }
+
+        // Update all permissions and roles to set created_by to admin
+        Permission::whereNull('created_by')->update(['created_by' => $admin->id]);
+        Role::whereNull('created_by')->update(['created_by' => $admin->id]);
 
         $this->command->info('✅ Admin user created successfully!');
         $this->command->info('');

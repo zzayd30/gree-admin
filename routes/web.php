@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmailLogController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TroubleshootErrorCodeController;
@@ -45,6 +46,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::post('/users/{user}/send-setup-email', [UserController::class, 'sendSetupEmail'])->name('users.send-setup-email');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
@@ -54,6 +56,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::post('/customers/{customer}/send-setup-email', [CustomerController::class, 'sendSetupEmail'])->name('customers.send-setup-email');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::get('/customers/{customer}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
@@ -108,6 +111,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/troubleshoots/{troubleshoot}/steps/{step}/edit', [TroubleshootStepController::class, 'edit'])->name('troubleshoots.steps.edit');
     Route::put('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'update'])->name('troubleshoots.steps.update');
     Route::delete('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'destroy'])->name('troubleshoots.steps.destroy');
+
+    // Email Logs
+    Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
+    Route::get('/email-logs/{emailLog}', [EmailLogController::class, 'show'])->name('email-logs.show');
 });
 
 require __DIR__.'/auth.php';

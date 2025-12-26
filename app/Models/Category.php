@@ -13,6 +13,7 @@ class Category extends Model
         'description',
         'is_active',
         'deleted',
+        'created_by',
     ];
 
     protected $casts = [
@@ -42,5 +43,10 @@ class Category extends Model
     public function videos()
     {
         return $this->belongsToMany(Video::class, 'category_video');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

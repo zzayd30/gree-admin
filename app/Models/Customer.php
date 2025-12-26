@@ -21,12 +21,14 @@ class Customer extends Model
         'email',
         'phone',
         'password',
+        'email_verified_at',
         'company',
         'type_of_business_id',
         'profile_picture',
         'status',
         'create_by_admin',
         'deleted',
+        'created_by',
     ];
 
     /**
@@ -51,5 +53,15 @@ class Customer extends Model
             'password' => 'hashed',
             'create_by_admin' => 'boolean',
         ];
+    }
+
+    public function typeOfBusiness()
+    {
+        return $this->belongsTo(TypeOfBusiness::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

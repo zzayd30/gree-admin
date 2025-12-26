@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
-            // TroubleshootErrorCodeSeeder::class, // Uncomment to seed troubleshoot error codes
         ]);
     }
 }

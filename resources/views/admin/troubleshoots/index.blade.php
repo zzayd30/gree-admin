@@ -83,8 +83,6 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Status</th>
-                                <th>Created By</th>
-                                <th>Created At</th>
                                 <th class="text-center">Action Control</th>
                             </tr>
                         </thead>
@@ -103,8 +101,6 @@
                                             <span class="status-badge bg-inactive">Inactive</span>
                                         @endif
                                     </td>
-                                    <td class="text-muted">{{ $troubleshoot->creator->name ?? 'N/A' }}</td>
-                                    <td class="text-muted small">{{ $troubleshoot->created_at->format('M d, Y') }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center">
                                             <a href="{{ route('troubleshoots.show', $troubleshoot->id) }}"

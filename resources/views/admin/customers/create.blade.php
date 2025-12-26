@@ -126,21 +126,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-4 text-start">
-                            <label class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control custom-input" required>
-                        </div>
-                        <div class="col-md-6 mb-4 text-start">
-                            <label class="form-label">Send Email to Customer</label>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" name="send_email" value="1"
-                                    id="send_email" {{ old('send_email') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="send_email"
-                                    style="text-transform: none; font-size: 14px;">
-                                    Yes, send account creation email with password setup link
-                                </label>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="mt-4 text-start border-top pt-4">

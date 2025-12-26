@@ -58,6 +58,21 @@ class LoginRequest extends FormRequest
                 'email' => 'This account has been deleted and cannot be accessed.',
             ]);
         }
+        if ($user->status !== 'active') {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Your account is inactive.',
+            ]);
+        }
+
+        if (is_null($user->email_verified_at)) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Please verify your email before login.',
+            ]);
+        }
 
         RateLimiter::clear($this->throttleKey());
     }

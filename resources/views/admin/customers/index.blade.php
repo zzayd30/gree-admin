@@ -109,6 +109,17 @@
                                     <td class="text-muted small">{{ $customer->created_at->format('M d, Y') }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center">
+                                            @if (!$customer->email_verified_at)
+                                                <form action="{{ route('customers.send-setup-email', $customer->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn-action-sm"
+                                                        style="background-color: #10b981; color: #fff;"
+                                                        title="Send Setup Email">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             <a href="{{ route('customers.show', $customer->id) }}" class="btn-action-sm"
                                                 style="background-color: #17a2b8; color: #fff;" title="View">
                                                 <i class="fas fa-eye"></i>

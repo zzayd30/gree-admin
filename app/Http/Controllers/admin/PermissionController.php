@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -34,7 +35,7 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name',
         ]);
 
-        Permission::create(['name' => $request->name]);
+        Permission::create(['name' => $request->name, 'created_by' => Auth::id()]);
 
         return redirect()->route('permissions.index')->with('success', 'Permission created successfully.');
     }
