@@ -63,6 +63,9 @@ class AdminSeeder extends Seeder
             'Create Customers',
             'Edit Customers',
             'Delete Customers',
+
+            // Email Log permissions
+            'View Email Logs',
         ];
 
         foreach ($permissions as $permission) {

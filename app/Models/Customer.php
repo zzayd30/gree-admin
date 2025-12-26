@@ -21,6 +21,7 @@ class Customer extends Model
         'email',
         'phone',
         'password',
+        'email_verified_at',
         'company',
         'type_of_business_id',
         'profile_picture',

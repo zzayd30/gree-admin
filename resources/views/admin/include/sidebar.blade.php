@@ -79,6 +79,14 @@
                     </a>
                 </li>
 
+                <!-- Email Logs -->
+                <li class="nav-item {{ request()->is('admin/email-logs*') ? 'active' : '' }}">
+                    <a href="{{ route('email-logs.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-envelope-open-text"></i>
+                        <p>Email Logs</p>
+                    </a>
+                </li>
+
                 <!-- Profile -->
                 <li class="nav-item {{ request()->is('profile') ? 'active' : '' }}">
                     <a href="{{ route('profile.edit') }}" class="nav-link">

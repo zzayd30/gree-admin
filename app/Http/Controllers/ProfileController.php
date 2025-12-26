@@ -37,8 +37,6 @@ class ProfileController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->user()->id],
-            'company' => ['required', 'string', 'max:255'],
-            'type_of_business' => ['required', 'exists:type_of_business,id'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
@@ -58,8 +56,6 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->company = $request->company;
-        $user->type_of_business_id = $request->type_of_business;
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

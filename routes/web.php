@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmailLogController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TroubleshootErrorCodeController;
@@ -110,6 +111,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/troubleshoots/{troubleshoot}/steps/{step}/edit', [TroubleshootStepController::class, 'edit'])->name('troubleshoots.steps.edit');
     Route::put('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'update'])->name('troubleshoots.steps.update');
     Route::delete('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'destroy'])->name('troubleshoots.steps.destroy');
+
+    // Email Logs
+    Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
+    Route::get('/email-logs/{emailLog}', [EmailLogController::class, 'show'])->name('email-logs.show');
 });
 
 require __DIR__.'/auth.php';

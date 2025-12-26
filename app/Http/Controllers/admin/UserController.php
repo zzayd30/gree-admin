@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +63,7 @@ class UserController extends Controller
             $user->assignRole($request->roles);
         }
 
-        return redirect()->route('users.index')->with('success', 'User created successfully. You can now send them an email to set up their account.');
+        return redirect()->route('users.index')->with('success', 'User created successfully.');
     }
 
     public function sendSetupEmail(User $user)
@@ -77,10 +78,43 @@ class UserController extends Controller
             'password' => Hash::make($temporaryPassword),
         ]);
 
-        // Send email notification
-        $user->notify(new \App\Notifications\UserAccountCreated($temporaryPassword));
+        try {
+            // Send email notification
+            $user->notify(new \App\Notifications\UserAccountCreated($temporaryPassword));
 
-        return redirect()->route('users.index')->with('success', 'Setup email sent successfully to ' . $user->email);
+            // Log the email
+            EmailLog::create([
+                'sent_by' => Auth::id(),
+                'recipient_email' => $user->email,
+                'recipient_name' => $user->name,
+                'recipient_type' => 'user',
+                'recipient_id' => $user->id,
+                'subject' => 'Your Account Has Been Created',
+                'body' => "Hello {$user->name},\n\nYour account has been created successfully.\nYour temporary password is: {$temporaryPassword}\n\nPlease use the link in your email to set up your permanent password.\n\nThis link will expire in 48 hours.",
+                'purpose' => 'Account Setup Email',
+                'status' => 'sent',
+                'sent_at' => now(),
+            ]);
+
+            return redirect()->route('users.index')->with('success', 'Setup email sent successfully to ' . $user->email);
+        } catch (\Exception $e) {
+            // Log failed email
+            EmailLog::create([
+                'sent_by' => Auth::id(),
+                'recipient_email' => $user->email,
+                'recipient_name' => $user->name,
+                'recipient_type' => 'user',
+                'recipient_id' => $user->id,
+                'subject' => 'Your Account Has Been Created',
+                'body' => "Hello {$user->name},\n\nYour account has been created successfully.\nYour temporary password is: {$temporaryPassword}\n\nPlease use the link in your email to set up your permanent password.\n\nThis link will expire in 48 hours.",
+                'purpose' => 'Account Setup Email',
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+                'sent_at' => now(),
+            ]);
+
+            return redirect()->route('users.index')->with('error', 'Failed to send setup email: ' . $e->getMessage());
+        }
     }
 
     public function show(User $user)

@@ -151,7 +151,7 @@
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             @endif
-                                            @if ($user->id !== auth()->id())
+                                            @if ($user->id !== 1 && $user->id !== auth()->id())
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf @method('DELETE')

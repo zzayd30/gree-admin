@@ -154,7 +154,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-6 mb-4 text-start">
                                     <label class="form-label">Company Name</label>
                                     <input type="text" name="company" class="form-control custom-input"
@@ -171,7 +171,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="mb-4 text-start">
                                 <label class="form-label">Profile Picture (Avatar)</label>

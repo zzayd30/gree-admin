@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\EmailLog;
 use App\Models\TypeOfBusiness;
 use App\Notifications\CustomerAccountCreated;
 use Illuminate\Http\Request;
@@ -49,7 +50,6 @@ class CustomerController extends Controller
             'status' => ['required', 'in:active,inactive'],
         ]);
 
-        // Generate a temporary password
         $temporaryPassword = Str::random(12);
 
         $customer = Customer::create([
@@ -64,7 +64,7 @@ class CustomerController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully. You can now send them an email to set up their account.');
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
 
     public function sendSetupEmail(Customer $customer)
@@ -73,16 +73,48 @@ class CustomerController extends Controller
             return redirect()->route('customers.index')->with('error', 'This customer has already verified their email.');
         }
 
-        // Generate a temporary password
         $temporaryPassword = Str::random(12);
         $customer->update([
             'password' => Hash::make($temporaryPassword),
         ]);
 
-        // Send email notification
-        $customer->notify(new CustomerAccountCreated($temporaryPassword));
+        try {
+            // Send email notification
+            $customer->notify(new CustomerAccountCreated($temporaryPassword));
 
-        return redirect()->route('customers.index')->with('success', 'Setup email sent successfully to ' . $customer->email);
+            // Log the email
+            EmailLog::create([
+                'sent_by' => Auth::id(),
+                'recipient_email' => $customer->email,
+                'recipient_name' => $customer->name,
+                'recipient_type' => 'customer',
+                'recipient_id' => $customer->id,
+                'subject' => 'Your Customer Account Has Been Created',
+                'body' => "Hello {$customer->name},\n\nYour customer account has been created successfully.\nYour temporary password is: {$temporaryPassword}\n\nPlease use the link in your email to set up your permanent password.\n\nThis link will expire in 48 hours.",
+                'purpose' => 'Customer Account Setup Email',
+                'status' => 'sent',
+                'sent_at' => now(),
+            ]);
+
+            return redirect()->route('customers.index')->with('success', 'Setup email sent successfully to '.$customer->email);
+        } catch (\Exception $e) {
+            // Log failed email
+            EmailLog::create([
+                'sent_by' => Auth::id(),
+                'recipient_email' => $customer->email,
+                'recipient_name' => $customer->name,
+                'recipient_type' => 'customer',
+                'recipient_id' => $customer->id,
+                'subject' => 'Your Customer Account Has Been Created',
+                'body' => "Hello {$customer->name},\n\nYour customer account has been created successfully.\nYour temporary password is: {$temporaryPassword}\n\nPlease use the link in your email to set up your permanent password.\n\nThis link will expire in 48 hours.",
+                'purpose' => 'Customer Account Setup Email',
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+                'sent_at' => now(),
+            ]);
+
+            return redirect()->route('customers.index')->with('error', 'Failed to send setup email: '.$e->getMessage());
+        }
     }
 
     public function show(Customer $customer)
