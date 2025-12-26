@@ -1,10 +1,9 @@
 <x-guest-layout>
     <div class="relative min-h-screen flex items-center justify-center bg-gray-900">
         <!-- Background Image with Overlay -->
-       <!-- Background Image with Overlay -->
+        <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('images/login-bg.jpg') }}" 
-                 class="w-full h-full object-cover opacity-40">
+            <img src="{{ asset('images/login-bg.jpg') }}" class="w-full h-full object-cover opacity-40">
             <!-- Blueish Gradient Overlay -->
             <div class="absolute inset-0 bg-gradient-to-t from-[#002e5a] via-transparent to-[#002e5a] opacity-70"></div>
         </div>
@@ -77,4 +76,18 @@
             </div>
         </div>
     </div>
+
+    @if (session('error') || session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                @if (session('error'))
+                    toastr.error('{{ session('error') }}');
+                @endif
+
+                @if (session('success'))
+                    toastr.success('{{ session('success') }}');
+                @endif
+            });
+        </script>
+    @endif
 </x-guest-layout>

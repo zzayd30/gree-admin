@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -52,6 +53,7 @@ class CategoryController extends Controller
             'slug' => $request->slug ?: Str::slug($request->name),
             'description' => $request->description,
             'is_active' => $request->input('is_active', 0),
+            'created_by' => Auth::id(),
         ]);
 
         // toastr.success('Operation successful!');

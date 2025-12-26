@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;
 
@@ -44,19 +46,41 @@ class UserController extends Controller
             'roles.*' => ['exists:roles,name'],
         ]);
 
+        // Generate temporary password
+        $temporaryPassword = Str::random(12);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->roles ? $request->roles[0] : null,
             'status' => $request->status,
-            'password' => Hash::make('12341234'),
+            'password' => Hash::make($temporaryPassword),
+            'created_by' => Auth::id(),
         ]);
 
         if ($request->roles) {
             $user->assignRole($request->roles);
         }
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'User created successfully. You can now send them an email to set up their account.');
+    }
+
+    public function sendSetupEmail(User $user)
+    {
+        if ($user->email_verified_at) {
+            return redirect()->route('users.index')->with('error', 'This user has already verified their email.');
+        }
+
+        // Generate a temporary password
+        $temporaryPassword = Str::random(12);
+        $user->update([
+            'password' => Hash::make($temporaryPassword),
+        ]);
+
+        // Send email notification
+        $user->notify(new \App\Notifications\UserAccountCreated($temporaryPassword));
+
+        return redirect()->route('users.index')->with('success', 'Setup email sent successfully to ' . $user->email);
     }
 
     public function show(User $user)

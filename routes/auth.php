@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\UserPasswordResetController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Customer\CustomerPasswordResetController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,13 @@ Route::middleware('guest')->group(function () {
 
     Route::post('customer/set-password', [CustomerPasswordResetController::class, 'setPassword'])
         ->name('customer.password.update');
+
+    // User Password Reset Routes
+    Route::get('user/set-password', [UserPasswordResetController::class, 'showSetPasswordForm'])
+        ->name('user.password.reset');
+
+    Route::post('user/set-password', [UserPasswordResetController::class, 'setPassword'])
+        ->name('user.password.update');
 });
 
 Route::middleware('auth')->group(function () {

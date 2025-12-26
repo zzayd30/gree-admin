@@ -130,6 +130,17 @@
                                     <td class="text-muted small">{{ $user->created_at->format('M d, Y') }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center">
+                                            @if (!$user->email_verified_at)
+                                                <form action="{{ route('users.send-setup-email', $user->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn-action-sm"
+                                                        style="background-color: #10b981; color: #fff;"
+                                                        title="Send Setup Email">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             <a href="{{ route('users.show', $user->id) }}" class="btn-action-sm"
                                                 style="background-color: #17a2b8; color: #fff;" title="View">
                                                 <i class="fas fa-eye"></i>

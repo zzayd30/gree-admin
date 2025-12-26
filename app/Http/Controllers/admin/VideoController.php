@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Video;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
@@ -69,12 +70,16 @@ class VideoController extends Controller
             'thumbnail' => $thumbnailPath,
             'duration' => $request->duration,
             'status' => $request->status,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
 
-        // Attach categories
+        // Attach categories with created_by
         if ($request->categories) {
-            $video->categories()->attach($request->categories);
+            $categoryData = [];
+            foreach ($request->categories as $categoryId) {
+                $categoryData[$categoryId] = ['created_by' => Auth::id()];
+            }
+            $video->categories()->attach($categoryData);
         }
 
         return redirect()->route('videos.index')->with('success', 'Video created successfully.');
@@ -138,9 +143,13 @@ class VideoController extends Controller
             'status' => $request->status,
         ]);
 
-        // Sync categories
+        // Sync categories with created_by
         if ($request->has('categories')) {
-            $video->categories()->sync($request->categories);
+            $categoryData = [];
+            foreach ($request->categories as $categoryId) {
+                $categoryData[$categoryId] = ['created_by' => Auth::id()];
+            }
+            $video->categories()->sync($categoryData);
         } else {
             $video->categories()->detach();
         }

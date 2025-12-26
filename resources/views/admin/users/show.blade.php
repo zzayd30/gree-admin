@@ -152,14 +152,6 @@
                                 <div class="info-value">{{ $user->email }}</div>
                             </div>
                             <div class="info-row">
-                                <div class="info-label">Company</div>
-                                <div class="info-value">{{ $user->company ?? 'Not Assigned' }}</div>
-                            </div>
-                            <div class="info-row">
-                                <div class="info-label">Business Type</div>
-                                <div class="info-value">{{ $user->typeOfBusiness->name ?? 'Not Assigned' }}</div>
-                            </div>
-                            <div class="info-row">
                                 <div class="info-label">Account Created</div>
                                 <div class="info-value text-muted">{{ $user->created_at->format('M d, Y - H:i') }}</div>
                             </div>
