@@ -50,7 +50,6 @@ class TroubleshootStepController extends Controller
         $validated = $request->validate([
             'step_number' => 'required|integer|min:1',
             'action' => 'required|string',
-            'sensor_type' => 'required|string|max:255',
             'tips' => 'nullable|array',
             'tips.*' => 'nullable|string',
         ]);

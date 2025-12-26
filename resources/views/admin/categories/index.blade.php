@@ -3,7 +3,23 @@
 
 @section('content')
     <style>
-        
+        .btn-create-custom {
+            background-color: #243a7f !important;
+            color: white !important;
+            padding: 10px 25px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            display: inline-block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-weight: 800;
+        }
     </style>
 
     <div class="content-header px-4 pt-4">

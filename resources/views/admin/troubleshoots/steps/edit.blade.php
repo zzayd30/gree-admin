@@ -32,7 +32,7 @@
         .custom-input {
             border-radius: 12px !important;
             padding: 12px 15px !important;
-            border: 1px solid #e2e8f0 !important;
+            border: none !important;
             background-color: #f8fafc !important;
             width: 100%;
         }
@@ -114,11 +114,11 @@
                         </div>
 
                         <div class="col-md-6 mb-4 text-start">
-                            <label class="form-label">Sensor Type <span class="text-danger">*</span></label>
+                            <label class="form-label">Sensor Type</label>
                             <input type="text"
                                 class="form-control custom-input @error('sensor_type') is-invalid @enderror"
                                 name="sensor_type" value="{{ old('sensor_type', $step->sensor_type) }}"
-                                placeholder="e.g., Indoor, Outdoor, etc." required>
+                                placeholder="e.g., Indoor, Outdoor, etc.">
                             @error('sensor_type')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror

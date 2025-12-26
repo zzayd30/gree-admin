@@ -32,7 +32,7 @@
         .custom-input {
             border-radius: 12px !important;
             padding: 12px 15px !important;
-            border: 1px solid #e2e8f0 !important;
+            border: none !important;
             background-color: #f8fafc !important;
             width: 100%;
         }
