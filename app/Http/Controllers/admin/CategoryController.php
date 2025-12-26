@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount('videos')->latest()->paginate(10);
+        $categories = Category::where('deleted', false)->withCount('videos')->latest()->paginate(10);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -112,7 +112,7 @@ class CategoryController extends Controller
             return redirect()->route('categories.index')->with('error', 'Cannot delete category with videos.');
         }
 
-        $category->delete();
+        $category->update(['deleted' => true]);
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }

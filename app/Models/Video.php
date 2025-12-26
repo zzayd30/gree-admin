@@ -17,10 +17,12 @@ class Video extends Model
         'status',
         'views_count',
         'created_by',
+        'deleted',
     ];
 
     protected $casts = [
         'views_count' => 'integer',
+        'deleted' => 'boolean',
     ];
 
     // Relationship with categories (many-to-many)

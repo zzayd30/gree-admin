@@ -15,8 +15,9 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
 
 </head>
 
@@ -40,6 +41,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             // Initialize Summernote
@@ -73,18 +75,45 @@
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         };
-        @if(session('success'))
+        @if (session('success'))
             toastr.success("{{ session('success') }}");
         @endif
-        @if(session('error'))
+        @if (session('error'))
             toastr.error("{{ session('error') }}");
         @endif
-        @if(session('warning'))
+        @if (session('warning'))
             toastr.warning("{{ session('warning') }}");
         @endif
-        @if(session('info'))
+        @if (session('info'))
             toastr.info("{{ session('info') }}");
         @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}");
+            @endforeach
+        @endif
+
+        // SweetAlert Delete Confirmation
+        window.confirmDelete = function(event, message = 'You won\'t be able to revert this!') {
+            event.preventDefault();
+            const form = event.target.closest('form');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        };
     </script>
     <script>
         @yield('customjs')

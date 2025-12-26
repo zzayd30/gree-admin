@@ -21,6 +21,7 @@ class VideoController extends Controller
     public function index()
     {
         $videos = Video::with(['categories', 'creator'])
+            ->where('deleted', false)
             ->latest()
             ->paginate(10);
         return view('admin.videos.index', compact('videos'));
@@ -28,7 +29,7 @@ class VideoController extends Controller
 
     public function create()
     {
-        $categories = Category::where('is_active', true)->orderBy('name')->get();
+        $categories = Category::where('is_active', true)->where('deleted', false)->orderBy('name')->get();
         return view('admin.videos.create', compact('categories'));
     }
 
@@ -159,7 +160,7 @@ class VideoController extends Controller
             Storage::disk('public')->delete($video->video_file);
         }
 
-        $video->delete();
+        $video->update(['deleted' => true]);
         return redirect()->route('videos.index')->with('success', 'Video deleted successfully.');
     }
 }

@@ -1,5 +1,5 @@
 @extends('admin.layout.app')
-@section('title', 'Video Categories')
+@section('title', 'Troubleshoot Error Codes')
 
 @section('content')
     <style>
@@ -82,68 +82,72 @@
 
     <div class="content-header px-4 pt-4">
         <div class="container-fluid">
-            <div class="row align-items-center text-start">
-                <div class="col-sm-6">
-                    <h1 class="page-title"><i class="fas fa-folder-open me-2"></i> Video Categories</h1>
-                    <p class="text-muted small mb-0 mt-1">Manage categories to organize your video library.</p>
+            <div class="row align-items-center">
+                <div class="col-sm-6 text-start">
+                    <h1 class="page-title"><i class="fas fa-tools me-2"></i> Troubleshoot Error Codes</h1>
+                    <p class="text-muted small mb-0 mt-1">Manage diagnostic procedures and error codes.</p>
                 </div>
                 <div class="col-sm-6 text-end">
-                    <a href="{{ route('categories.create') }}" class="btn-create-custom">
-                        <i class="fas fa-plus-circle me-1"></i> Create Category
+                    <a href="{{ route('troubleshoots.create') }}" class="btn-create-custom">
+                        <i class="fas fa-plus me-1"></i> Create New Code
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="content px-4">
+    <section class="content">
         <div class="container-fluid">
             <div class="modern-card shadow-sm">
                 <div class="table-responsive">
                     <table class="table modern-table mb-0">
                         <thead>
                             <tr>
-                                <th>Name & Slug</th>
-                                <th class="text-center">Videos</th>
-                                <th class="text-center">Status</th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Created By</th>
                                 <th>Created At</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center">Action Control</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($categories as $category)
+                            @forelse($troubleshoots as $troubleshoot)
                                 <tr>
+                                    <td class="text-muted">#{{ $troubleshoot->id }}</td>
                                     <td>
-                                        <div class="fw-bold text-dark" style="font-size: 15px;">{{ $category->name }}</div>
-                                        <code class="small text-pink" style="color: #d63384;">{{ $category->slug }}</code>
+                                        <div class="fw-bold text-dark" style="font-size: 15px;">{{ $troubleshoot->name }}
+                                        </div>
                                     </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-light text-primary border px-3 py-2 rounded-pill">
-                                            <i class="fas fa-video me-1"></i> {{ $category->videos_count }}
-                                        </span>
+                                    <td>
+                                        @if ($troubleshoot->status == 'active')
+                                            <span class="status-badge bg-active">Active</span>
+                                        @else
+                                            <span class="status-badge bg-inactive">Inactive</span>
+                                        @endif
                                     </td>
-                                    <td class="text-center">
-                                        <span class="status-badge {{ $category->is_active ? 'bg-active' : 'bg-inactive' }}">
-                                            {{ $category->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td class="text-muted small">{{ $category->created_at->format('M d, Y') }}</td>
+                                    <td class="text-muted">{{ $troubleshoot->creator->name ?? 'N/A' }}</td>
+                                    <td class="text-muted small">{{ $troubleshoot->created_at->format('M d, Y') }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center">
-                                            <a href="{{ route('categories.show', $category->id) }}" class="btn-action-sm"
-                                                style="background-color: #17a2b8; color: #fff;" title="View">
+                                            <a href="{{ route('troubleshoots.show', $troubleshoot->id) }}"
+                                                class="btn-action-sm" style="background-color: #17a2b8; color: #fff;"
+                                                title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('categories.edit', $category->id) }}" class="btn-action-sm"
-                                                style="background-color: #ffc107; color: #000;" title="Edit">
+                                            <a href="{{ route('troubleshoots.edit', $troubleshoot->id) }}"
+                                                class="btn-action-sm" style="background-color: #ffc107; color: #000;"
+                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf @method('DELETE')
+                                            <form action="{{ route('troubleshoots.destroy', $troubleshoot->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
                                                 <button type="submit" class="btn-action-sm"
                                                     style="background-color: #dc3545; color: #fff;"
-                                                    onclick="confirmDelete(event, 'This category will be deleted!')">
+                                                    onclick="confirmDelete(event, 'This troubleshoot error code will be deleted!')"
+                                                    title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -152,13 +156,17 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-5 text-muted">No categories found.</td>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="fas fa-folder-open me-2"></i> No Troubleshoot Error Codes Available.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                <div class="px-4 py-3 border-top">{{ $categories->links('pagination::bootstrap-5') }}</div>
+                <div class="px-4 py-3 border-top">
+                    {{ $troubleshoots->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </section>

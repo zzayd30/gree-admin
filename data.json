@@ -1,0 +1,78 @@
+{
+    "procedure": "Indoor Ambient Sensor Diagnostic",
+    "steps": [
+        {
+            "step": 1,
+            "action": "Evaluate the installation",
+            "tips": [
+                "Do not overlook the obvious",
+                "Check if indoor filters, coil, and blower wheel are clean",
+                "Verify the condenser is clean",
+                "Confirm the outdoor unit has adequate space for airflow",
+                "Confirm the indoor unit has adequate space for airflow",
+                "Determine if this is a new installation",
+                "Verify all service valves are open",
+                "Confirm the system was evacuated below 500 microns",
+                "For multi-zone units, verify wiring and linesets match the correct outdoor ports for each indoor unit (circuit is located at the bottom)",
+                "Linesets must be sized according to the indoor unit line sizes",
+                "Lineset adapters are used at the outdoor unit only",
+                "Verify if additional refrigerant charge was required per submittal or installation instructions"
+            ]
+        },
+        {
+            "step": 1,
+            "action": "Disconnect power from the unit",
+            "tips": [
+                "Power must be disconnected before performing resistance or sensor testing"
+            ]
+        },
+        {
+            "step": 2,
+            "action": "Ohm the indoor ambient sensor",
+            "tips": [
+                "Use needle-point probes for accurate readings",
+                "This error code will not be generated if the thermistor is simply out of range",
+                "Use the 15K thermistor chart to verify the sensor resistance matches ambient temperature",
+                "Refer to the Thermistor Temperature to Resistance Table"
+            ],
+            "sensorType": "15K NTC Thermistor"
+        },
+        {
+            "step": 3,
+            "action": "Test sensors (thermistors)",
+            "tips": [
+                "Indoor coil sensor and indoor ambient sensor share the same Molex connector at the board",
+                "Test the coil temperature sensor at the same time",
+                "The coil temperature sensor is a 20K thermistor"
+            ],
+            "sensorTypes": [
+                "15K NTC Thermistor (ambient)",
+                "20K NTC Thermistor (coil)"
+            ]
+        },
+        {
+            "step": 4,
+            "action": "Confirm thermistor operation",
+            "tips": [
+                "If initial resistance readings are acceptable, disconnect and visually inspect the sensors",
+                "Test sensors in ice water saturated with ice",
+                "At 32°F (0°C), resistance should match the thermistor chart",
+                "After warming the sensor in your hand, resistance should drop quickly",
+                "Intermittent failures may only appear during temperature change"
+            ]
+        },
+        {
+            "step": 5,
+            "action": "Replace indoor control board if sensors test good",
+            "tips": [
+                "GREE uses negative temperature coefficient (NTC) thermistors",
+                "15K sensors are used for air or ambient temperature on indoor and outdoor units",
+                "20K sensors are used for coil and pipe temperature on indoor and outdoor units",
+                "The compressor discharge line uses a 50K sensor",
+                "Generic 15K, 20K, or 50K sensors may be used if they follow the same NTC resistance chart",
+                "Using approved generic sensors can allow first-trip repair",
+                "All splices must follow best practices and be moisture-proof"
+            ]
+        }
+    ]
+}

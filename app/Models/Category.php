@@ -12,10 +12,12 @@ class Category extends Model
         'slug',
         'description',
         'is_active',
+        'deleted',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'deleted' => 'boolean',
     ];
 
     // Auto-generate slug from name

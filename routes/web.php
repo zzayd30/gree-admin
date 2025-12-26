@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\TroubleshootErrorCodeController;
+use App\Http\Controllers\Admin\TroubleshootStepController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\ProfileController;
@@ -90,6 +92,22 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
     Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
     Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
+
+    // Troubleshoot Error Codes
+    Route::get('/troubleshoots', [TroubleshootErrorCodeController::class, 'index'])->name('troubleshoots.index');
+    Route::get('/troubleshoots/create', [TroubleshootErrorCodeController::class, 'create'])->name('troubleshoots.create');
+    Route::post('/troubleshoots', [TroubleshootErrorCodeController::class, 'store'])->name('troubleshoots.store');
+    Route::get('/troubleshoots/{troubleshoot}', [TroubleshootErrorCodeController::class, 'show'])->name('troubleshoots.show');
+    Route::get('/troubleshoots/{troubleshoot}/edit', [TroubleshootErrorCodeController::class, 'edit'])->name('troubleshoots.edit');
+    Route::put('/troubleshoots/{troubleshoot}', [TroubleshootErrorCodeController::class, 'update'])->name('troubleshoots.update');
+    Route::delete('/troubleshoots/{troubleshoot}', [TroubleshootErrorCodeController::class, 'destroy'])->name('troubleshoots.destroy');
+
+    // Troubleshoot Steps
+    Route::get('/troubleshoots/{troubleshoot}/steps/create', [TroubleshootStepController::class, 'create'])->name('troubleshoots.steps.create');
+    Route::post('/troubleshoots/{troubleshoot}/steps', [TroubleshootStepController::class, 'store'])->name('troubleshoots.steps.store');
+    Route::get('/troubleshoots/{troubleshoot}/steps/{step}/edit', [TroubleshootStepController::class, 'edit'])->name('troubleshoots.steps.edit');
+    Route::put('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'update'])->name('troubleshoots.steps.update');
+    Route::delete('/troubleshoots/{troubleshoot}/steps/{step}', [TroubleshootStepController::class, 'destroy'])->name('troubleshoots.steps.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -98,6 +98,11 @@
                                 value="{{ old('email') }}" required>
                         </div>
                         <div class="col-md-6 mb-4 text-start">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone" class="form-control custom-input"
+                                value="{{ old('phone') }}" required>
+                        </div>
+                        <div class="col-md-6 mb-4 text-start">
                             <label class="form-label">Company Name</label>
                             <input type="text" name="company" class="form-control custom-input"
                                 value="{{ old('company') }}">
@@ -126,8 +131,15 @@
                             <input type="password" name="password" class="form-control custom-input" required>
                         </div>
                         <div class="col-md-6 mb-4 text-start">
-                            <label class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control custom-input" required>
+                            <label class="form-label">Send Email to Customer</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="send_email" value="1"
+                                    id="send_email" {{ old('send_email') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="send_email"
+                                    style="text-transform: none; font-size: 14px;">
+                                    Yes, send account creation email with password setup link
+                                </label>
+                            </div>
                         </div>
                     </div>
 

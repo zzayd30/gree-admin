@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('roles')->paginate(10);
+        $users = User::with('roles')->where('deleted', false)->paginate(10);
         // dd($users);
 
         return view('admin.users.index', compact('users'));
@@ -115,7 +115,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('error', 'You cannot delete your own account.');
         }
 
-        $user->delete();
+        $user->update(['deleted' => true]);
 
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }

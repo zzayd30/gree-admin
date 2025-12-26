@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\TypeOfBusiness;
+use App\Notifications\CustomerAccountCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 
 class CustomerController extends Controller
@@ -21,7 +23,7 @@ class CustomerController extends Controller
 
     public function index()
     {
-        $customers = Customer::paginate(10);
+        $customers = Customer::where('deleted', false)->paginate(10);
 
         return view('admin.customers.index', compact('customers'));
     }
@@ -40,21 +42,35 @@ class CustomerController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:customers'],
+            'phone' => ['required', 'string', 'max:20'],
             'company' => ['nullable', 'string', 'max:255'],
             'type_of_business' => ['nullable', 'exists:type_of_business,id'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
             'status' => ['required', 'in:active,inactive'],
+            'send_email' => ['nullable', 'boolean'],
         ]);
+
+        // Store the plain password for email
+        $plainPassword = $request->password;
+
+        // Determine status: if send_email is checked, set to inactive; otherwise use selected status
+        $customerStatus = $request->has('send_email') ? 'inactive' : $request->status;
 
         $customer = Customer::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'company' => $request->company,
             'type_of_business_id' => $request->type_of_business,
-            'status' => $request->status,
+            'status' => $customerStatus,
             'create_by_admin' => true,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make($plainPassword),
         ]);
+
+        // Send email if checkbox is checked
+        if ($request->has('send_email')) {
+            $customer->notify(new CustomerAccountCreated($plainPassword));
+        }
 
         return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
@@ -103,7 +119,7 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
-        $customer->delete();
+        $customer->update(['deleted' => true]);
 
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }

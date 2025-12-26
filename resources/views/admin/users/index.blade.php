@@ -146,7 +146,7 @@
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="btn-action-sm"
                                                         style="background-color: #dc3545; color: #fff;"
-                                                        onclick="return confirm('Delete this user?')">
+                                                        onclick="confirmDelete(event, 'This user will be deleted!')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>

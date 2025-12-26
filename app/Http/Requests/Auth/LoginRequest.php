@@ -49,6 +49,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if the authenticated user is deleted
+        $user = Auth::user();
+        if ($user && $user->deleted) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'This account has been deleted and cannot be accessed.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
