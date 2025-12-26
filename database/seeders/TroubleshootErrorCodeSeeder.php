@@ -23,7 +23,6 @@ class TroubleshootErrorCodeSeeder extends Seeder
             // Create the main troubleshoot error code record
             $troubleshoot = TroubleshootErrorCode::create([
                 'name' => $jsonData['procedure'],
-                'description' => 'Diagnostic procedure for ' . $jsonData['procedure'],
                 'status' => 'active',
                 'created_by' => null,
             ]);
