@@ -30,11 +30,14 @@
         .btn-edit-main {
             background-color: #243a7f !important;
             color: white !important;
-            padding: 10px 25px;
-            font-weight: 700;
-            border: none !important;
-            box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2);
+            padding: 10px 25px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            display: inline-block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
             text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
         }
 
         .page-title {
@@ -43,12 +46,16 @@
         }
 
         .btn-back-outline {
-            border: 1px solid #cbd5e1 !important;
-            color: #64748b !important;
-            padding: 9px 20px;
-            font-weight: 700;
-            background: #fff !important;
+            background-color: #fff !important;
+            color: #243a7f !important;
+            padding: 10px 25px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            display: inline-block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
             text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
         }
 
         /* 4. Modern Technical Cards */
@@ -135,6 +142,19 @@
             padding: 20px;
             text-align: center;
             margin-top: 10px;
+        }
+
+        .btn-light-border {
+            border: 1px solid white !important;
+            color: white !important;
+            padding: 10px 25px !important;
+            border-radius: 12px !important;
+            font-weight: 700 !important;
+            display: inline-block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2) !important;
         }
     </style>
 
@@ -225,7 +245,7 @@
                 <div class="gradient-header d-flex justify-content-between align-items-center">
                     <span><i class="fas fa-stream me-2"></i> Technical Recovery Steps</span>
                     <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}"
-                        class="btn btn-sm btn-light border fw-bold px-3" style="font-size: 11px;">
+                        class="btn-light-border">
                         <i class="fas fa-plus me-1"></i> ADD STEP
                     </a>
                 </div>
