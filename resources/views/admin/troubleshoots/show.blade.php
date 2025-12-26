@@ -34,7 +34,7 @@
             font-weight: 700;
             border: none !important;
             box-shadow: 0 4px 12px rgba(36, 58, 127, 0.2);
-
+            text-decoration: none !important;
         }
 
         .page-title {
@@ -48,6 +48,7 @@
             padding: 9px 20px;
             font-weight: 700;
             background: #fff !important;
+            text-decoration: none !important;
         }
 
         /* 4. Modern Technical Cards */
