@@ -155,122 +155,116 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="detail-card">
                         <div class="detail-header">
                             <i class="fas fa-info-circle me-2"></i> Code Information
                         </div>
-                        <div class="info-row">
-                            <span class="info-label">Code Name</span>
-                            <span class="info-value">{{ $troubleshoot->name }}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Status</span>
-                            <span class="info-value">
-                                @if ($troubleshoot->status == 'active')
-                                    <span class="status-badge bg-active">Active</span>
-                                @else
-                                    <span class="status-badge bg-inactive">Inactive</span>
-                                @endif
-                            </span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Created By</span>
-                            <span class="info-value">{{ $troubleshoot->creator->name ?? 'N/A' }}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Created At</span>
-                            <span class="info-value">{{ $troubleshoot->created_at->format('M d, Y h:i A') }}</span>
-                        </div>
-                        <div class="info-row" style="border-bottom: none;">
-                            <span class="info-label">Last Updated</span>
-                            <span class="info-value">{{ $troubleshoot->updated_at->format('M d, Y h:i A') }}</span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <span class="info-label">Code Name</span>
+                                    <span class="info-value">{{ $troubleshoot->name }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <span class="info-label">Status</span>
+                                    <span class="info-value">
+                                        @if ($troubleshoot->status == 'active')
+                                            <span class="status-badge bg-active">Active</span>
+                                        @else
+                                            <span class="status-badge bg-inactive">Inactive</span>
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            @if ($troubleshoot->steps->count() > 0)
-                <div class="detail-card mt-4">
-                    <div class="detail-header d-flex justify-content-between align-items-center">
-                        <span><i class="fas fa-list-ol me-2"></i> Troubleshoot Steps
-                            ({{ $troubleshoot->steps->count() }})</span>
-                        <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}" class="btn btn-sm btn-light">
-                            <i class="fas fa-plus me-1"></i> Add Step
-                        </a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table modern-table mb-0">
-                            <thead>
+        @if ($troubleshoot->steps->count() > 0)
+            <div style="border-radius: 20px;" class="detail-header d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-list-ol me-2"></i> Troubleshoot Steps
+                    ({{ $troubleshoot->steps->count() }})</span>
+                <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}" class="btn btn-sm btn-light">
+                    <i class="fas fa-plus me-1"></i> Add Step
+                </a>
+            </div>
+            <div class="detail-card mt-4">
+                <div class="table-responsive">
+                    <table class="table modern-table mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th style="width: 100px">Step Number</th>
+                                <th>Action</th>
+                                <th>Sensor Type</th>
+                                <th>Tips</th>
+                                <th style="width: 120px" class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($troubleshoot->steps as $step)
                                 <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th style="width: 100px">Step Number</th>
-                                    <th>Action</th>
-                                    <th>Sensor Type</th>
-                                    <th>Tips</th>
-                                    <th style="width: 120px" class="text-center">Actions</th>
+                                    <td class="text-muted">{{ $loop->iteration }}</td>
+                                    <td><span class="badge bg-primary">Step {{ $step->step_number }}</span></td>
+                                    <td class="fw-bold">{{ $step->action }}</td>
+                                    <td><span class="badge bg-info">{{ $step->sensor_type }}</span></td>
+                                    <td>
+                                        @if (is_array($step->tips))
+                                            <ul class="mb-0 ps-3">
+                                                @foreach ($step->tips as $tip)
+                                                    <li class="small">{{ $tip }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <span class="small">{{ $step->tips }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('troubleshoots.steps.edit', [$troubleshoot->id, $step->id]) }}"
+                                            class="btn btn-sm btn-warning" title="Edit Step">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form
+                                            action="{{ route('troubleshoots.steps.destroy', [$troubleshoot->id, $step->id]) }}"
+                                            method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="confirmDelete(event, 'This step will be deleted!')"
+                                                title="Delete Step">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($troubleshoot->steps as $step)
-                                    <tr>
-                                        <td class="text-muted">{{ $loop->iteration }}</td>
-                                        <td><span class="badge bg-primary">Step {{ $step->step_number }}</span></td>
-                                        <td class="fw-bold">{{ $step->action }}</td>
-                                        <td><span class="badge bg-info">{{ $step->sensor_type }}</span></td>
-                                        <td>
-                                            @if (is_array($step->tips))
-                                                <ul class="mb-0 ps-3">
-                                                    @foreach ($step->tips as $tip)
-                                                        <li class="small">{{ $tip }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            @else
-                                                <span class="small">{{ $step->tips }}</span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{{ route('troubleshoots.steps.edit', [$troubleshoot->id, $step->id]) }}"
-                                                class="btn btn-sm btn-warning" title="Edit Step">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form
-                                                action="{{ route('troubleshoots.steps.destroy', [$troubleshoot->id, $step->id]) }}"
-                                                method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="confirmDelete(event, 'This step will be deleted!')"
-                                                    title="Delete Step">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            @else
-                <div class="detail-card mt-4">
-                    <div class="detail-header d-flex justify-content-between align-items-center">
-                        <span><i class="fas fa-list-ol me-2"></i> Troubleshoot Steps</span>
-                        <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}"
-                            class="btn btn-sm btn-light">
-                            <i class="fas fa-plus me-1"></i> Add Step
-                        </a>
-                    </div>
-                    <div class="p-5 text-center">
-                        <i class="fas fa-info-circle text-muted" style="font-size: 48px;"></i>
-                        <p class="text-muted mt-3 mb-0">No troubleshoot steps found for this error code.</p>
-                        <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}"
-                            class="btn btn-primary mt-3">
-                            <i class="fas fa-plus me-1"></i> Add First Step
-                        </a>
-                    </div>
+            </div>
+        @else
+        <div style="border-radius: 20px;" class="detail-header d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-list-ol me-2"></i> Troubleshoot Steps</span>
+                    <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-plus me-1"></i> Add Step
+                    </a>
                 </div>
-            @endif
+            <div class="detail-card mt-4">
+                
+                <div class="p-5 text-center">
+                    <i class="fas fa-info-circle text-muted" style="font-size: 48px;"></i>
+                    <p class="text-muted mt-3 mb-0">No troubleshoot steps found for this error code.</p>
+                    <a href="{{ route('troubleshoots.steps.create', $troubleshoot->id) }}" class="btn btn-primary mt-3">
+                        <i class="fas fa-plus me-1"></i> Add First Step
+                    </a>
+                </div>
+            </div>
+        @endif
         </div>
     </section>
 @endsection
